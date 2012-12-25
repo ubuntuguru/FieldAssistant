@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="6dip" >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="123dp" >
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/inputbtn"
+        android:layout_width="75dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="Input" />
+
+    <Button
+        android:id="@+id/foulbtn"
+        android:layout_width="75dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/inputbtn"
+        android:text="Foul" />
+
+    <Button
+        android:id="@+id/passbtn"
+        android:layout_width="75dip"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/foulbtn"
+        android:layout_below="@+id/foulbtn"
+        android:text="Pass" />
+
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="200dip"
+        android:layout_height="300dip"
+        android:layout_below="@+id/foulbtn" >
+
+    </ListView>
+
+    <Button
+        android:id="@+id/clearbtn"
+        android:layout_width="75dip"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/passbtn"
+        android:layout_below="@+id/passbtn"
+        android:text="clear" />
+
+    <Button
+        android:id="@+id/backbtn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="Back" />
+
+    <TextView
+        android:id="@+id/competitorinfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="Competitor\n\n Team" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/foulbtn"
+        android:layout_alignBottom="@+id/foulbtn"
+        android:layout_alignLeft="@+id/listView1"
+        android:text="#                  Mark" />
+
+</RelativeLayout>

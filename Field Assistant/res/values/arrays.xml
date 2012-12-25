@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="flightlongclick">
+        <item>Check In</item>
+        <item>Suspend</item>
+        <item>No Show</item>
+        <item>Up Next</item>
+
+    </string-array>
+    <string-array name="rightclick">
+        <item>Foul</item>
+        <item>Pass</item>
+        <item>Clear Height</item>
+        <item>Erase Attempt</item>
+    </string-array>
+    <string-array name="homelongclick">
+        
+        <item>Make Final</item>
+        <item>Delete Selected Event</item>
+        <item>Upload results</item>
+    </string-array>
+</resources>

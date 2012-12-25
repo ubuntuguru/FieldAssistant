@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/settings" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/serverip" />
+
+    <EditText
+        android:id="@+id/serverip"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:text="">
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/remotepath" />
+
+    <EditText
+        android:id="@+id/sharepath"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/localpath" />
+
+    <EditText
+        android:id="@+id/localpath"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+	<TextView
+    	android:id="@+id/storagepath"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Base Path:  " />
+		<CheckBox
+	    android:id="@+id/smb_autoconnect"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginLeft="44dp"
+	    android:layout_marginTop="100dp"
+	    android:text="Automatically Download Events" />
+    <Button
+        android:id="@+id/btnsave"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Save" />
+
+</LinearLayout>
