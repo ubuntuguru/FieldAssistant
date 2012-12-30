@@ -16,11 +16,11 @@ public class DBCompetitorTable {
     public static final String LASTNAME = "lastname";
 
     // COMPETITOR_ID
-    public static final String COMPETITOR_ID = "competitor_id";
+    public static final String EXT_COMPETITOR_ID = "ext_competitor_id";
 
     // TABLE_NAME
     public static final String TABLE_NAME = "competitor";
 
     // THE TABLE SCHEMA
-    public static final String SCHEMA = "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + TEAM + " TEXT," + FIRSTNAME + " TEXT," + LASTNAME + " TEXT," + COMPETITOR_ID + " INTEGER);";
+    public static final String SCHEMA = "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + TEAM + " TEXT," + FIRSTNAME + " TEXT," + LASTNAME + " TEXT," + EXT_COMPETITOR_ID + " INTEGER);";
 }

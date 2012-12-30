@@ -52,18 +52,85 @@ public class SchemaHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-//    public long addStudent(String name, String state, int grade) {
-//        // CREATE A CONTENTVALUE OBJECT
-//        ContentValues cv = new ContentValues();
-////        cv.put(StudentTable.NAME, name);
-////        cv.put(StudentTable.STATE, state);
-////        cv.put(StudentTable.GRADE, grade);
+    public long addCompetitor(String first, String last, String team, Integer cid) {
+    	  // CREATE A CONTENTVALUE OBJECT
+    	  ContentValues cv = new ContentValues();
+    	  cv.put(DBCompetitorTable.FIRSTNAME, first);
+    	  cv.put(DBCompetitorTable.LASTNAME, last);
+    	  cv.put(DBCompetitorTable.TEAM, team);
+    	  cv.put(DBCompetitorTable.EXT_COMPETITOR_ID, cid);
+
+    	  // RETRIEVE WRITEABLE DATABASE AND INSERT
+    	  SQLiteDatabase sd = getWritableDatabase();
+    	  long result = sd.insert(DBCompetitorTable.TABLE_NAME, DBCompetitorTable.FIRSTNAME, cv);
+    	  return result;
+    	}
+    
+  public long addEvent(Integer exteventid, Integer round, Integer flight, String event, Integer eventtype) {
+	  // CREATE A CONTENTVALUE OBJECT
+	  ContentValues cv = new ContentValues();
+	  cv.put(DBEventsTable.EXT_EVENT_ID, exteventid);
+	  cv.put(DBEventsTable.ROUND, round);
+	  cv.put(DBEventsTable.FLIGHT, flight);
+	  cv.put(DBEventsTable.EVENT, event);
+	  cv.put(DBEventsTable.EVENT_TYPE, eventtype);
+
+	  // RETRIEVE WRITEABLE DATABASE AND INSERT
+	  SQLiteDatabase sd = getWritableDatabase();
+	  long result = sd.insert(DBEventsTable.TABLE_NAME, DBEventsTable.EXT_EVENT_ID, cv);
+	  return result;
+	}
+  
+  public Cursor showEvents() {
+	  SQLiteDatabase sd = getWritableDatabase();
+
+	  // WE NEED TO RETURN ALL FIELDS
+	  String[] columns = new String[] { DBEventsTable.ID, DBEventsTable.EVENT_TYPE, DBEventsTable.EXT_EVENT_ID, DBEventsTable.ROUND, DBEventsTable.FLIGHT, DBEventsTable.EVENT };
+
+	  // QUERY ALL EVENTS
+	  Cursor c = sd.query(DBEventsTable.TABLE_NAME, columns, null, null, null, null, null);
+
+	  return c;
+	  }
+  
+  public Cursor getEvents(Integer eventid) {
+	  SQLiteDatabase sd = getWritableDatabase();
+
+	  // WE NEED TO RETURN ALL FIELDS
+	  String[] columns = new String[] { DBEventsTable.ID, DBEventsTable.EVENT_TYPE, DBEventsTable.EXT_EVENT_ID, DBEventsTable.ROUND, DBEventsTable.FLIGHT, DBEventsTable.EVENT };
+
+	  String[] selectionArgs = new String[] { String.valueOf(eventid) };
+	  
+	  // QUERY ALL EVENTS MATCHING EXT_EVENT_ID
+	  Cursor c = sd.query(DBEventsTable.TABLE_NAME, columns, DBEventsTable.EXT_EVENT_ID + "= ?", selectionArgs, null, null, null);
+	  //Cursor c = sd.query(ClassTable.TABLE_NAME, columns,  + "= ? ", selectionArgs, null, null, null);
+	  return c;
+	  }
+  
+  public Cursor showDistinctEvents() {
+	  SQLiteDatabase sd = getWritableDatabase();
+
+	  // WE NEED TO RETURN ALL DISTINCT EXTERNAL EVENT ID's
+	  String[] columns = new String[] {"distinct " + DBEventsTable.EXT_EVENT_ID, DBEventsTable.EVENT };
+
+	  // QUERY ALL EVENTS
+	  Cursor c = sd.query(DBEventsTable.TABLE_NAME, columns, null, null, null, null, null);
+
+	  return c;
+	  }
+  
+//  public long addStudent(String name, String state, int grade) {
+//  // CREATE A CONTENTVALUE OBJECT
+//  ContentValues cv = new ContentValues();
+////  cv.put(StudentTable.NAME, name);
+////  cv.put(StudentTable.STATE, state);
+////  cv.put(StudentTable.GRADE, grade);
 //
-//        // RETRIEVE WRITEABLE DATABASE AND INSERT
-//        SQLiteDatabase sd = getWritableDatabase();
-//        long result = sd.insert(StudentTable.TABLE_NAME, StudentTable.NAME, cv);
-//        return result;
-//    }
+//  // RETRIEVE WRITEABLE DATABASE AND INSERT
+//  SQLiteDatabase sd = getWritableDatabase();
+//  long result = sd.insert(StudentTable.TABLE_NAME, StudentTable.NAME, cv);
+//  return result;
+//}
 //
 //    public long addCourse(String name) {
 //        ContentValues cv = new ContentValues();

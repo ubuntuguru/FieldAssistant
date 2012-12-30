@@ -10,7 +10,7 @@ public class DBEventsTable {
     public static final String EVENT_TYPE = "event_type";
 
     // EVENT_ID
-    public static final String EVENT_ID = "event_id";
+    public static final String EXT_EVENT_ID = "ext_event_id";
 
     // ROUND
     public static final String ROUND = "round";
@@ -25,5 +25,5 @@ public class DBEventsTable {
     public static final String TABLE_NAME = "events";
 
     // THE TABLE SCHEMA
-    public static final String SCHEMA = "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + EVENT_TYPE + " INTEGER," + EVENT_ID + " ," + ROUND + " INTEGER," + FLIGHT + " INTEGER," + EVENT + " STRING);";
+    public static final String SCHEMA = "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + EVENT_TYPE + " INTEGER," + EXT_EVENT_ID + " ," + ROUND + " INTEGER," + FLIGHT + " INTEGER," + EVENT + " STRING);";
 }
