@@ -19,5 +19,31 @@
         <item>Make Final</item>
         <item>Delete Selected Event</item>
         <item>Upload results</item>
+        <item>Setup Event</item>
+    </string-array>
+    <string-array name="event_type">
+	    <item>Pole Vault</item>
+	    <item>High Jump</item>
+	    <item>Horizontal Jumps</item>
+	    <item>Throws</item>
+    </string-array>
+    <string-array name="et_num">
+	    <item>0</item>
+	    <item>1</item>
+	    <item>2</item>
+	    <item>3</item>
+	</string-array>
+    <string-array name="num">
+	    <item>#</item>
+	    <item>0</item>
+	    <item>1</item>
+	    <item>2</item>
+	    <item>3</item>
+	    <item>4</item>
+	    <item>5</item>
+	    <item>6</item>
+	    <item>7</item>
+	    <item>8</item>
+	    <item>9</item>
     </string-array>
 </resources>

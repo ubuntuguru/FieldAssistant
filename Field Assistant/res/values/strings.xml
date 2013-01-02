@@ -17,10 +17,12 @@
     <string name="transfer">Transfer event/round</string>
     <string name="preferences">Preferences</string>
 	<string name="about">About</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="options">Options</string>
     <string name="no">NO</string>
     <string name="yes">Yes</string>
     <string name="continuestr">Continue</string>
+    <string name="event_type">Event Type</string>
+    <string name="et_default">Horizontal Jumps</string>
 
 </resources>

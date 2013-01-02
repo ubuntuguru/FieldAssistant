@@ -64,7 +64,7 @@ public class SelectEvent extends Activity{
 	        
 	        final Spinner s = (Spinner) findViewById(R.id.selectevent);
 	        ArrayAdapter adapter = new ArrayAdapter(this,
-	        android.R.layout.simple_spinner_item, array_spinner);
+	        android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.event_type));
 	        s.setAdapter(adapter);
 	        Button b = (Button)findViewById(R.id.selecteventbutton);
 	    	b.setOnClickListener(new View.OnClickListener() {
@@ -79,17 +79,18 @@ public class SelectEvent extends Activity{
 	    				
 	    			Pullevents p = new Pullevents();
 	    			p.start(v.getContext(), Integer.parseInt(round), s.getSelectedItemPosition());
-	    			DataBaseHelper d = new DataBaseHelper(v.getContext());
+	    			//DataBaseHelper d = new DataBaseHelper(v.getContext());
+	    			//SchemaHelper sh = new SchemaHelper(getApplicationContext());
 	    			Spinner type =(Spinner)findViewById(R.id.selectevent);
 	    			EditText attempts = (EditText)findViewById(R.id.attempts);
 	    			EditText numfinals = (EditText)findViewById(R.id.finals);
 	    			EditText finalattempts = (EditText)findViewById(R.id.finalattempts);
 	    			System.out.println(Integer.parseInt(round));
-	    			d.addConf(Integer.parseInt(round), "TYPE", String.valueOf(type.getSelectedItemPosition()));
-	    			d.addConf(Integer.parseInt(round),"ATTEMPTS", attempts.getText().toString());
-	    			d.addConf(Integer.parseInt(round),"NUMFINALS", numfinals.getText().toString());
-	    			d.addConf(Integer.parseInt(round),"FINALATTEMPTS", finalattempts.getText().toString());
-	    			d.close();
+//	    			sh.addConf(Integer.parseInt(round), "TYPE", String.valueOf(type.getSelectedItemPosition()));
+//	    			sh.addConf(Integer.parseInt(round),"ATTEMPTS", attempts.getText().toString());
+//	    			sh.addConf(Integer.parseInt(round),"NUMFINALS", numfinals.getText().toString());
+//	    			sh.addConf(Integer.parseInt(round),"FINALATTEMPTS", finalattempts.getText().toString());
+	    			//d.close();
 	    			
 	    			if(attempts.getText().length() > 0){
 	    					

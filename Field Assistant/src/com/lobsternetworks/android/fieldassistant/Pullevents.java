@@ -23,8 +23,9 @@ private String[][] events;
 public String[][] start(Context c, Integer eventid, Integer t){
 	Integer currentevent = 0;
 	Integer Sec = 0;
-	DataBaseHelper d = new DataBaseHelper(c);
-	   d.open();
+//	DataBaseHelper d = new DataBaseHelper(c);
+//	   d.open();
+	SchemaHelper sh = new SchemaHelper(c);
 	try{	
 //			Settings s = new Settings();
 //			String path = s.getPreference("fielddroid:localpath");
@@ -41,6 +42,7 @@ public String[][] start(Context c, Integer eventid, Integer t){
 		   //just reading each line and pass it on the debugger
 		 String events[][] = new String[64][5];
 		 int i =0;
+		 String dbeventid = "";
 		   while((readString = buf.readLine())!= null){
 			   String[] foo = readString.split(",");
 			   Integer x = 0;
@@ -57,7 +59,7 @@ public String[][] start(Context c, Integer eventid, Integer t){
 					   
 					   System.out.println("dbevent");
 					   Sec = Integer.parseInt(foo[2]);
-				   d.addEvent(Integer.parseInt(foo[0]), Integer.parseInt(foo[1]), Integer.parseInt(foo[2]), foo[3], t);
+				   dbeventid = String.valueOf(sh.addEvent(Integer.parseInt(foo[0]), Integer.parseInt(foo[1]), Integer.parseInt(foo[2]), foo[3], t));
 				   i=0;
 				   events[i][0] = foo[0].toString();
 				   events[i][1] = foo[1].toString();
@@ -73,10 +75,10 @@ public String[][] start(Context c, Integer eventid, Integer t){
 				   if(i>0){
 					   System.out.println(readString + "+");
 					   try{
-						   d.addcompetitor(Integer.parseInt(foo[1]),foo[3].toString() , foo[4].toString(), foo[5].toString());
-						   Integer dbeventid = d.getEvent_ID(eventid, Sec);
-						   Integer dbcompetitorid = d.getCompetitor_ID(Integer.parseInt(foo[1]));
-						   d.addcompetitorevent(dbeventid, dbcompetitorid, Integer.parseInt(foo[2]));
+						   String dbcompetitor_id = String.valueOf(sh.addCompetitor(Integer.parseInt(foo[1]),foo[3].toString() , foo[4].toString(), foo[5].toString()));
+						   //Integer dbeventid = sh.getEvent_ID(eventid, Sec);
+						   //Integer dbcompetitorid = sh.getCompetitor_ID(Integer.parseInt(foo[1]));
+						   sh.addCompetitorEvent(Integer.parseInt(dbeventid), Integer.parseInt(dbcompetitor_id), Integer.parseInt(foo[2]));
 					   }catch(Exception e){
 						   System.out.println(e);
 					   }
@@ -93,7 +95,7 @@ public String[][] start(Context c, Integer eventid, Integer t){
 		 
 		}
 	
-	d.close();
+	sh.close();
 		return events;
 }
 }

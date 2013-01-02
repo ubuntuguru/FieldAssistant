@@ -73,7 +73,17 @@ public class main extends ExpandableListActivity
         super.onCreate(icicle);
         setContentView(R.layout.eventevl);
         Settings s = new Settings();
-        DataBaseHelper myDbHelper = new DataBaseHelper(null);
+        //DataBaseHelper myDbHelper = new DataBaseHelper(null);
+        SchemaHelper sh = new SchemaHelper(this);
+        Cursor c = sh.showEvents();
+        c.moveToFirst();
+        Integer count = c.getCount();
+        
+        System.out.println("eventcount"+ count);
+        for (int i=0;i<count;i++){
+        	System.out.println("eventid"+c.getInt(2));
+        }
+        sh.close();
         SharedPreferences sharedPreferences = getSharedPreferences("fieldassistant", MODE_PRIVATE);
 	    String thekey = sharedPreferences.getString("fieldassistant:localpath", "/data/data/com.lobsternetworks.android.fieldassistant/");
         Functions.setLocalPath(thekey);
@@ -86,35 +96,16 @@ public class main extends ExpandableListActivity
         System.out.println("path" + getPreference("fieldassistant:localpath"));
         //System.out.println("path" + s.getPreference("fielddroid:localpath"));
         
-        myDbHelper = new DataBaseHelper(this);
+        //myDbHelper = new DataBaseHelper(this);
+        
         }catch(Exception e){
         	
         }
-        try {
- 
-        	myDbHelper.createDataBase();
-
- 	} catch (IOException ioe) {
- 		System.out.println(ioe);
- 		throw new Error("Unable to create database");
- 
- 	}
         
         
         String[] events = null;
- 	try {
- 		System.out.println("moo");
- 		myDbHelper.open();
-
- 		System.out.println("success");
- 
- 	}catch(Exception sqle){
- 		System.out.println("utoh");
- 		
- 		System.out.println(sqle);
- 	}
  	
- 	myDbHelper.close();
+ 	
         
  	Button b = (Button)findViewById(R.id.selectevent);
 	b.setOnClickListener(new View.OnClickListener() {
@@ -166,6 +157,7 @@ public class main extends ExpandableListActivity
 
       public void  rebuild(){
           //create the expandable list
+    	  try{
           SimpleExpandableListAdapterWithEmptyGroups expListAdapter =
   			new SimpleExpandableListAdapterWithEmptyGroups(
   				this,
@@ -186,7 +178,13 @@ public class main extends ExpandableListActivity
   		            int groupPosition = ExpandableListView.getPackedPositionGroup(id);
   		            int childPosition = ExpandableListView.getPackedPositionChild(id);
   		          Toast.makeText(getApplicationContext(), "LONG" + groupPosition, Toast.LENGTH_SHORT).show();
-  		            // You now have everything that you would as if this was an OnChildClickListener() 
+  		          
+  		          SchemaHelper sh = new SchemaHelper(getApplicationContext());
+  		          Cursor c=sh.showDistinctEvents();
+  		          c.moveToPosition(groupPosition);
+  		          Functions.setExt_event_id(c.getInt(0));
+  		        sh.close();
+  		            		            // You now have everything that you would as if this was an OnChildClickListener() 
   		            // Add your logic here.
   		        final String[] menu = getResources().getStringArray(R.array.homelongclick);
   		    	AlertDialog.Builder builder = new AlertDialog.Builder(main.this);
@@ -194,7 +192,10 @@ public class main extends ExpandableListActivity
   		    	builder.setItems(menu, new DialogInterface.OnClickListener() {
   		    	    public void onClick(DialogInterface dialog, int item) {
   		    	    	Toast.makeText(getApplicationContext(), menu[item], Toast.LENGTH_SHORT).show();
-  		    	        
+  		    	    	if(item == 3){
+  		    	    		Intent intent = new Intent(main.this, SettingsDistanceActivity.class);
+  		    				startActivityForResult(intent, 0);
+  		    	    	}
   		    	    }
   		    	});
   		    	AlertDialog alert = builder.create();
@@ -214,11 +215,13 @@ public class main extends ExpandableListActivity
   		            // Return true as we are handling the event.
   		            return true;
   		        }
-
+  		    	
   		        return false;
   		    }
   		});
-
+    	  }catch(Exception e){
+  			System.out.println(e);
+  		}
       }
       public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id) {
     	  Functions.setActiveEvent(Integer.parseInt(childs[groupPosition][childPosition]));
@@ -247,22 +250,25 @@ public class main extends ExpandableListActivity
       }  
 	private List<HashMap<String, String>> createGroupList() {
 	  ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
+	  SchemaHelper sh = new SchemaHelper(this);
 	  try{ 
-    	  DataBaseHelper myDbHelper = new DataBaseHelper(null);
-          myDbHelper = new DataBaseHelper(this);
+    	  //DataBaseHelper myDbHelper = new DataBaseHelper(null);
+          //myDbHelper = new DataBaseHelper(this);
+		  
     	  
-    	  myDbHelper.open();
-   	 	Cursor c = myDbHelper.showdistinctEvents();
-   	 	//c.moveToNext();
-  		Integer count = c.getCount(); 		
-  		System.out.println("count"+count);
+    	  //myDbHelper.open();
+   	 	Cursor c = sh.showDistinctEvents();
+   	 	c.moveToFirst();
+  		Integer count = c.getCount();
+  		//System.out.println();
+  		System.out.println("group"+count);
   		//events = new String[count-1];
 //   	 	String Text = "";
   		groups = new String[count];
   		Integer i =0;
   		c.moveToFirst();
   		for(int f = 0;f<count; f++){
-   	 		System.out.println(i);
+   	 		//System.out.println(i);
    	 		 //events[i]=  c.getInt(1) + "," + c.getInt(2) + "," + c.getInt(3) + "," + c.getString(4);
    	 		//"eventid", "id", "round", "flight", "event"
    	 	HashMap<String, String> map = new HashMap<String, String>();
@@ -274,29 +280,36 @@ public class main extends ExpandableListActivity
    	 		 c.moveToNext();
    	 	}
   		//myDbHelper.addConf(9999, "test", "3");
-   	 	myDbHelper.close();
+   	 	//myDbHelper.close();
+  		
     	 }catch(Exception e){
     		 System.out.println(e);
     	 }
+    	 sh.close();
 	  return (List<HashMap<String, String>>)result;
     }
 
   private List<ArrayList<HashMap<String, String>>> createChildList() {
 		ArrayList<ArrayList<HashMap<String, String>>> result = new ArrayList<ArrayList<HashMap<String, String>>>();
+		 SchemaHelper sh = new SchemaHelper(this);
 	  try{ 
-    	  DataBaseHelper myDbHelper = new DataBaseHelper(null);
-          myDbHelper = new DataBaseHelper(this);
-    	  
-    	  myDbHelper.open();
-    	  Cursor c = myDbHelper.showdistinctEvents();
-     	 	//c.moveToNext();
+//    	  DataBaseHelper myDbHelper = new DataBaseHelper(null);
+//          myDbHelper = new DataBaseHelper(this);
+//    	  
+//    	  myDbHelper.open();
+		 
+    	  Cursor c = sh.showDistinctEvents();
+     	 	c.moveToFirst();
     		Integer count_c = c.getCount();
+    		System.out.println("child"+count_c);
     		childs = new String[count_c][100];
 	for( int i = 0 ; i < count_c ; ++i ) {
 	  ArrayList<HashMap<String, String>> secList = new ArrayList<HashMap<String, String>>();
-	  Cursor d = myDbHelper.getevents(c.getInt(0));
+	  System.out.println("Event " + c.getInt(0));
+	  Cursor d = sh.getEvent(c.getInt(0));
 	  Integer count_d = d.getCount();
-	  
+	  System.out.println(count_d);
+	  d.moveToFirst();
 	  for( int n = 0 ; n < count_d; n++ ) {
 	    HashMap<String, String> child = new HashMap<String, String>();
 		child.put( "round", "Round " + String.valueOf(d.getInt(2)) );
@@ -308,10 +321,12 @@ public class main extends ExpandableListActivity
 	  result.add( secList );
 	  c.moveToNext();
 	}
-	myDbHelper.close();
+	
+	//myDbHelper.close();
  	 }catch(Exception e){
  		 System.out.println(e);
  	 }
+ 	sh.close();
 	return result;
   }
   public void SavePreference(String key, String value){

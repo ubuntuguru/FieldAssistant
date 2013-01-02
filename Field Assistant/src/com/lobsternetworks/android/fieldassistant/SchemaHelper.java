@@ -16,7 +16,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "fieldAssistant.db";
 
 	// TOGGLE THIS NUMBER FOR UPDATING TABLES AND DATABASE
-	private static final int DATABASE_VERSION = 0;
+	private static final int DATABASE_VERSION = 3;
 
 	SchemaHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -56,6 +56,11 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 
+	public void close(){
+		SQLiteDatabase db = getWritableDatabase();
+		db.close();
+	}
+	
 	public void deleteAll(){
 		SQLiteDatabase db = getWritableDatabase();
 		db.execSQL("DELETE FROM " + DBAttemptsDistanceTable.TABLE_NAME);
@@ -65,7 +70,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		db.execSQL("DELETE FROM " + DBEventsTable.TABLE_NAME);
 	}
 	
-	public long addCompetitor(String first, String last, String team, Integer cid) {
+	public long addCompetitor(Integer cid, String first, String last, String team) {
 		// CREATE A CONTENTVALUE OBJECT
 		ContentValues cv = new ContentValues();
 		cv.put(DBCompetitorTable.FIRSTNAME, first);
@@ -134,15 +139,16 @@ public class SchemaHelper extends SQLiteOpenHelper {
 
 	public Cursor getEvent(Integer eventid) {
 		SQLiteDatabase sd = getWritableDatabase();
-
+		System.out.println("DC"+ eventid);
 		// WE NEED TO RETURN ALL FIELDS
 		String[] columns = new String[] { DBEventsTable.ID, DBEventsTable.EVENT_TYPE, DBEventsTable.EXT_EVENT_ID, DBEventsTable.ROUND, DBEventsTable.FLIGHT, DBEventsTable.EVENT };
 
 		String[] selectionArgs = new String[] { String.valueOf(eventid) };
 
 		// QUERY ALL EVENTS MATCHING EXT_EVENT_ID
-		Cursor c = sd.query(DBEventsTable.TABLE_NAME, columns, DBEventsTable.EXT_EVENT_ID + "= ?", selectionArgs, null, null, null);
+		Cursor c = sd.query(DBEventsTable.TABLE_NAME, columns, DBEventsTable.EXT_EVENT_ID + "=?", selectionArgs, null, null, null);
 		//Cursor c = sd.query(ClassTable.TABLE_NAME, columns,  + "= ? ", selectionArgs, null, null, null);
+		System.out.println("db"+c.getCount());
 		return c;
 	}
 	

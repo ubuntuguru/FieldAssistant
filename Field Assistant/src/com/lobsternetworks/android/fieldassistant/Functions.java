@@ -11,6 +11,18 @@ public class Functions extends Activity{
 	static String sharepath;
 	static String serverip;
 	Integer eventid, competitorid;
+	static Integer ext_event_id;
+	
+	
+	
+	
+	public static Integer getExt_event_id() {
+		return ext_event_id;
+	}
+
+	public static void setExt_event_id(Integer the_ext_event_id) {
+		the_ext_event_id = ext_event_id;
+	}
 	static Integer ActiveEvent, CompetitorID;
 	static Integer attemptNum = null;
 	public static Integer getAttemptNum() {
