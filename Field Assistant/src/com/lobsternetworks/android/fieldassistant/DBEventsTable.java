@@ -25,5 +25,5 @@ public class DBEventsTable {
     public static final String TABLE_NAME = "events";
 
     // THE TABLE SCHEMA
-    public static final String SCHEMA = "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + EVENT_TYPE + " INTEGER," + EXT_EVENT_ID + " INTEGER," + ROUND + " INTEGER," + FLIGHT + " INTEGER," + EVENT + " STRING);";
+    public static final String SCHEMA = "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + EVENT_TYPE + " INTEGER, " + EXT_EVENT_ID + " INTEGER, " + ROUND + " INTEGER, " + FLIGHT + " INTEGER, " + EVENT + " STRING);";
 }

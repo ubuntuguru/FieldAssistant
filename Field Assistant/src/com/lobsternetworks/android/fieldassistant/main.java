@@ -87,20 +87,12 @@ public class main extends ExpandableListActivity
         SharedPreferences sharedPreferences = getSharedPreferences("fieldassistant", MODE_PRIVATE);
 	    String thekey = sharedPreferences.getString("fieldassistant:localpath", "/data/data/com.lobsternetworks.android.fieldassistant/");
         Functions.setLocalPath(thekey);
-        
 
-        try{
         System.out.println("my:" + Functions.getLocalPath());
         Functions.setSharePath(getPreference("fieldassistant:sharepath"));
         Functions.setServerIP(getPreference("fieldassistant:serverip"));
         System.out.println("path" + getPreference("fieldassistant:localpath"));
-        //System.out.println("path" + s.getPreference("fielddroid:localpath"));
-        
-        //myDbHelper = new DataBaseHelper(this);
-        
-        }catch(Exception e){
-        	
-        }
+
         
         
         String[] events = null;
@@ -224,6 +216,7 @@ public class main extends ExpandableListActivity
   		}
       }
       public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id) {
+    	  System.out.println("event " + Integer.parseInt(childs[groupPosition][childPosition]));
     	  Functions.setActiveEvent(Integer.parseInt(childs[groupPosition][childPosition]));
   		Toast.makeText(getApplicationContext(), "Short" + groupPosition + childPosition, Toast.LENGTH_SHORT).show();
   		Intent intent = new Intent(view.getContext(), FlightActivity.class);
@@ -308,13 +301,14 @@ public class main extends ExpandableListActivity
 	  System.out.println("Event " + c.getInt(0));
 	  Cursor d = sh.getEvent(c.getInt(0));
 	  Integer count_d = d.getCount();
-	  System.out.println(count_d);
+	  System.out.println("athletes" + count_d);
 	  d.moveToFirst();
 	  for( int n = 0 ; n < count_d; n++ ) {
 	    HashMap<String, String> child = new HashMap<String, String>();
-		child.put( "round", "Round " + String.valueOf(d.getInt(2)) );
-	    child.put( "flight", "Flight " + String.valueOf(d.getInt(3)) );
-	    childs[i][n] = String.valueOf(d.getInt(1)); 
+		child.put( "round", "Round " + String.valueOf(d.getInt(3)) );
+	    child.put( "flight", "Flight " + String.valueOf(d.getInt(4)) );
+	    System.out.println("asdf"+d.getInt(0));
+	    childs[i][n] = String.valueOf(d.getInt(0)); 
 		secList.add( child );
 		d.moveToNext();
 	  }

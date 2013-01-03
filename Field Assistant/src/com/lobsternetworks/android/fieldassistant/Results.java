@@ -16,7 +16,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.lobsternetworks.android.fieldassistant.R;
 
 public class Results extends Activity{
-	DataBaseHelper d = new DataBaseHelper(this);
+	SchemaHelper d = new SchemaHelper(getApplicationContext());
 ListView myList;
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -63,13 +63,13 @@ ListView myList;
        		public void onClick(View v) {
        			// TODO Auto-generated method stub
        			try{
-       				d.open();
+       				
        				if(Functions.getAttemptNum() != null){
        					d.updateAttempt(Functions.getCompetitorID(),Functions.getActiveEvent(), " ", Functions.getAttemptNum());
        					Functions.clearAttemptNum();
        					onUpdate();
        				}
-       				d.close();
+       				
        		}catch(Exception e){
        				System.out.println(e);
        			}
@@ -83,7 +83,7 @@ ListView myList;
        			// TODO Auto-generated method stub
        			try{
        				Integer n = 0;
-       				d.open();
+       				
        				if(Functions.getAttemptNum() == null){
             	        Cursor c = d.getAttempts(Functions.getCompetitorID(), Functions.getActiveEvent());
             			
@@ -114,7 +114,7 @@ ListView myList;
        			// TODO Auto-generated method stub
        			try{
        				Integer n = 0;
-       				d.open();
+       				
        				if(Functions.getAttemptNum() == null){
         	        Cursor c = d.getAttempts(Functions.getCompetitorID(), Functions.getActiveEvent());
         			
@@ -127,7 +127,7 @@ ListView myList;
         			if(finals == true){
         				Toast.makeText(getApplicationContext(), "General FAilure", Toast.LENGTH_LONG).show();
         			}else{
-        			Integer attempts = Integer.parseInt(d.getConf(Functions.getActiveEvent(), "ATTEMPTS")); 
+        			Integer attempts = Integer.parseInt(d.getEventConf(Functions.getActiveEvent(), "ATTEMPTS")); 
         				if(n <= attempts){
         					d.addAttempt(n, "P", Functions.getCompetitorID(),Functions.getActiveEvent());
         					Toast.makeText(getApplicationContext(), "General FAilure", Toast.LENGTH_LONG).show();
@@ -159,10 +159,8 @@ ListView myList;
 		Integer competitorid = Functions.getCompetitorID();
         Integer eventid = Functions.getActiveEvent();
 		try{
-	        DataBaseHelper d = new DataBaseHelper(null);
-	        d = new DataBaseHelper(this);
-	        d.open();
-	        Cursor c = d.getcompetitorbyid(competitorid);
+	        SchemaHelper d = new SchemaHelper(getApplicationContext());
+	        Cursor c = d.getCompetitorById(competitorid);
 	        c.moveToFirst();
 	        TextView tv = (TextView) findViewById(R.id.competitorinfo);
 	        tv.setText(c.getString(1) + " " + c.getString(2) + "\n" + c.getString(3));

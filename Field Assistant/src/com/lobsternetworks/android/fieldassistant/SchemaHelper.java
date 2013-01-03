@@ -16,7 +16,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "fieldAssistant.db";
 
 	// TOGGLE THIS NUMBER FOR UPDATING TABLES AND DATABASE
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 6;
 
 	SchemaHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -49,7 +49,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		        db.execSQL("DROP TABLE IF EXISTS " + DBCompetitorEventTable.TABLE_NAME);
 		        db.execSQL("DROP TABLE IF EXISTS " + DBCompetitorTable.TABLE_NAME);
 		        db.execSQL("DROP TABLE IF EXISTS " + DBEventConfTable.TABLE_NAME);
-//		        db.execSQL("DROP TABLE IF EXISTS " + DBExampleTable.TABLE_NAME);
+		        db.execSQL("DROP TABLE IF EXISTS " + DBEventsTable.TABLE_NAME);
 		        
 
 		// CREATE NEW INSTANCE OF SCHEMA
@@ -92,6 +92,18 @@ public class SchemaHelper extends SQLiteOpenHelper {
 
 		// QUERY ALL EVENTS
 		Cursor c = sd.query(DBCompetitorTable.TABLE_NAME, columns, null, null, null, null, null);
+
+		return c;
+	}
+	
+	public Cursor showCompetitorevent() {
+		SQLiteDatabase sd = getWritableDatabase();
+
+		// WE NEED TO RETURN ALL FIELDS
+		String[] columns = new String[] { DBCompetitorEventTable.ID, DBCompetitorEventTable.COMPETITOR_ID, DBCompetitorEventTable.EVENT_ID };
+
+		// QUERY ALL EVENTS
+		Cursor c = sd.query(DBCompetitorEventTable.TABLE_NAME, columns, null, null, null, null, null);
 
 		return c;
 	}
@@ -156,7 +168,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		SQLiteDatabase sd = getWritableDatabase();
 
 		// WE NEED TO RETURN ALL FIELDS
-		String[] columns = new String[] { DBAttemptsDistanceTable.ID, DBAttemptsDistanceTable.ATTEMPTNUM, DBAttemptsDistanceTable.COMPETITOR_ID, DBAttemptsDistanceTable.ATTEMPT, DBAttemptsDistanceTable.EVENT_ID };
+		String[] columns = new String[] { DBAttemptsDistanceTable.ID, DBAttemptsDistanceTable.ATTEMPTNUM, DBAttemptsDistanceTable.ATTEMPT, DBAttemptsDistanceTable.EVENT_ID };
 
 		String[] selectionArgs = new String[] { String.valueOf(competitorid), String.valueOf(eventid) };
 
@@ -173,8 +185,17 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		String[] selectionArgs = new String[] { String.valueOf(eventid) };
 
 		// QUERY ALL EVENTS MATCHING EXT_EVENT_ID
-		Cursor c = sd.rawQuery("SELECT " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.ID + ", " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.FIRSTNAME + ", " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.LASTNAME + ", " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.TEAM + ", " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.EXT_COMPETITOR_ID + ", " + DBCompetitorEventTable.TABLE_NAME + "." + DBCompetitorEventTable.POSITION + ", " + DBEventsTable.TABLE_NAME + "." + DBEventsTable.ROUND + ", " + DBEventsTable.TABLE_NAME + "." + DBEventsTable.FLIGHT + ", " + DBCompetitorEventTable.TABLE_NAME + "." + DBCompetitorEventTable.PLACE+ "FROM " + DBCompetitorTable.TABLE_NAME + ", " + DBCompetitorEventTable.TABLE_NAME + ", " + DBEventsTable.TABLE_NAME + " WHERE " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.ID + "=" + DBCompetitorEventTable.TABLE_NAME + "." + DBCompetitorEventTable.COMPETITOR_ID + " AND " + DBCompetitorEventTable.TABLE_NAME + "." + DBCompetitorEventTable.EVENT_ID + "=" + DBEventsTable.TABLE_NAME + "." + DBEventsTable.ID + " and " + DBEventsTable.TABLE_NAME + "." + DBEventsTable.ID + "=?", selectionArgs);
-
+		//String query ="SELECT " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.ID + ", " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.FIRSTNAME + ", " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.LASTNAME + ", " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.TEAM + ", " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.EXT_COMPETITOR_ID + ", " + DBCompetitorEventTable.TABLE_NAME + "." + DBCompetitorEventTable.POSITION +
+		String query ="SELECT " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.ID + ", " + DBCompetitorTable.FIRSTNAME + ", " + DBCompetitorTable.LASTNAME + ", " + DBCompetitorTable.TEAM + ", " + DBCompetitorTable.EXT_COMPETITOR_ID + ", " + DBCompetitorEventTable.POSITION +
+		" FROM " + DBCompetitorTable.TABLE_NAME + " LEFT OUTER JOIN " + DBCompetitorEventTable.TABLE_NAME + 
+		" ON " + 
+		DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.ID + "=" + DBCompetitorEventTable.TABLE_NAME + "." + DBCompetitorEventTable.COMPETITOR_ID+
+		//+ "' AND '"
+		" WHERE " + 
+		DBCompetitorEventTable.EVENT_ID + "= ?"; 
+		System.out.println(query);
+		Cursor c = sd.rawQuery(query, selectionArgs);
+		c.moveToFirst();
 		return c;
 	}
 	

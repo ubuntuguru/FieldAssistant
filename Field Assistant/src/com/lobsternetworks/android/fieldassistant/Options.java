@@ -30,15 +30,12 @@ public class Options extends Activity {
     		@Override
     		public void onClick(View v) {
     			// TODO Auto-generated method stub
-    			try{
-    				DataBaseHelper d = new DataBaseHelper(v.getContext());
-    				d.open();
-    				d.deleteall();
+    			
+    				SchemaHelper d = new SchemaHelper(getApplicationContext());
+    				d.deleteAll();
     				d.close();
     				finish();
-    			}catch(Exception e){
-    				System.out.println(e);
-    			}
+    			
     		}
     	});
     	Button ok = (Button)findViewById(R.id.ok);

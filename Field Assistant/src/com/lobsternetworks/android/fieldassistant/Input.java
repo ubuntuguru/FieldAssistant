@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.lobsternetworks.android.fieldassistant.R;
 
 public class Input extends Activity{
-	DataBaseHelper d = new DataBaseHelper(this);
+	SchemaHelper d = new SchemaHelper(getApplicationContext());
 	
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -343,7 +343,7 @@ public class Input extends Activity{
 //    			Text = " ";
 //    			distance.setText(Text);
 
-    			d.open();
+    			
 
     	        Cursor c = d.getAttempts(Functions.getCompetitorID(), Functions.getActiveEvent());
     			
