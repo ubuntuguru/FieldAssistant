@@ -24,5 +24,6 @@
     <string name="continuestr">Continue</string>
     <string name="event_type">Event Type</string>
     <string name="et_default">Horizontal Jumps</string>
+    <string name="backup">Backup Database</string>
 
 </resources>

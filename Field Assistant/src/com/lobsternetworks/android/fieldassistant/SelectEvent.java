@@ -80,17 +80,17 @@ public class SelectEvent extends Activity{
 	    			Pullevents p = new Pullevents();
 	    			p.start(v.getContext(), Integer.parseInt(round), s.getSelectedItemPosition());
 	    			//DataBaseHelper d = new DataBaseHelper(v.getContext());
-	    			//SchemaHelper sh = new SchemaHelper(getApplicationContext());
+	    			SchemaHelper sh = new SchemaHelper(getApplicationContext());
 	    			Spinner type =(Spinner)findViewById(R.id.selectevent);
 	    			EditText attempts = (EditText)findViewById(R.id.attempts);
 	    			EditText numfinals = (EditText)findViewById(R.id.finals);
 	    			EditText finalattempts = (EditText)findViewById(R.id.finalattempts);
 	    			System.out.println(Integer.parseInt(round));
-//	    			sh.addConf(Integer.parseInt(round), "TYPE", String.valueOf(type.getSelectedItemPosition()));
-//	    			sh.addConf(Integer.parseInt(round),"ATTEMPTS", attempts.getText().toString());
-//	    			sh.addConf(Integer.parseInt(round),"NUMFINALS", numfinals.getText().toString());
-//	    			sh.addConf(Integer.parseInt(round),"FINALATTEMPTS", finalattempts.getText().toString());
-	    			//d.close();
+	    			sh.addEventConf(Integer.parseInt(round), "TYPE", String.valueOf(type.getSelectedItemPosition()));
+	    			sh.addEventConf(Integer.parseInt(round),"ATTEMPTS", attempts.getText().toString());
+	    			sh.addEventConf(Integer.parseInt(round),"NUMFINALS", numfinals.getText().toString());
+	    			sh.addEventConf(Integer.parseInt(round),"FINALATTEMPTS", finalattempts.getText().toString());
+	    			sh.close();
 	    			
 	    			if(attempts.getText().length() > 0){
 	    					

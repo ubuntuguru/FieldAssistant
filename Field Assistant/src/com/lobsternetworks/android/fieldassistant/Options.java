@@ -2,6 +2,8 @@ package com.lobsternetworks.android.fieldassistant;
 
 //import com.lobsternetworks.android.fielddroid.R;
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +14,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.lobsternetworks.android.fieldassistant.R;
 
 public class Options extends Activity {
@@ -71,6 +75,23 @@ public class Options extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(getApplicationContext(), About.class);
 		    	startActivityForResult(intent,0);
+			}});
+    	
+    	Button backup = (Button)findViewById(R.id.backup);
+    	backup.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				DataBaseBackup b = new DataBaseBackup();
+				try {
+					b.backup();
+					Toast.makeText(getApplicationContext(), "Backup Completed", Toast.LENGTH_LONG).show();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					Toast.makeText(getApplicationContext(), "Backup Failed", Toast.LENGTH_LONG).show();
+					e.printStackTrace();
+				}
 			}});
     	
     	

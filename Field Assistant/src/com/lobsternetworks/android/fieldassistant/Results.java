@@ -16,14 +16,15 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.lobsternetworks.android.fieldassistant.R;
 
 public class Results extends Activity{
-	SchemaHelper d = new SchemaHelper(getApplicationContext());
+	//SchemaHelper d = new SchemaHelper(getApplicationContext());
 ListView myList;
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.results);
+        
         String[] list = new String[] {"1 test", "2tester"};
         final Boolean finals = false;
-       
+        
         onUpdate();
         
         Button input = (Button)findViewById(R.id.inputbtn);
@@ -48,7 +49,7 @@ ListView myList;
        		public void onClick(View v) {
        			// TODO Auto-generated method stub
        			try{
-       				d.close();
+       				//d.close();
        				Functions.clearAttemptNum();
        				finish();
        			}catch(Exception e){
@@ -62,6 +63,7 @@ ListView myList;
        		@Override
        		public void onClick(View v) {
        			// TODO Auto-generated method stub
+       			SchemaHelper d = new SchemaHelper(getApplicationContext());
        			try{
        				
        				if(Functions.getAttemptNum() != null){
@@ -73,6 +75,7 @@ ListView myList;
        		}catch(Exception e){
        				System.out.println(e);
        			}
+       		d.close();
        		}
        	});
        	Button foul = (Button)findViewById(R.id.foulbtn);
@@ -81,10 +84,80 @@ ListView myList;
        		@Override
        		public void onClick(View v) {
        			// TODO Auto-generated method stub
-       			try{
+       			SchemaHelper d = new SchemaHelper(getApplicationContext());
+       			
+   				Integer n = 0;
+   				Integer e = 100;
+   				Integer f = 0;
+   				Cursor z = d.showEventConf();
+   				for(Integer i=0;i<z.getCount();i++){
+   					System.out.println(z.getInt(0)+" "+z.getInt(1)+" "+z.getString(2)+" " +z.getString(3));
+   					z.moveToNext();
+   				}
+   				try{
+   				System.out.println("exe"+d.getEventID(Functions.getActiveEvent()).getInt(2));			
+   				e = Integer.parseInt(d.getEventConf(d.getEventID(Functions.getActiveEvent()).getInt(2), "ATTEMPTS"));
+   				System.out.println(e);
+   				f = d.attemptnum(Functions.getCompetitorID(), Functions.getActiveEvent());
+   				
+   				}catch(Exception ex){
+   					ex.printStackTrace();
+   				}
+   				
+   				if(Functions.getAttemptNum() == null){
+   				if(f < e+1){
+        	        Cursor c = d.getAttempts(Functions.getCompetitorID(), Functions.getActiveEvent());
+        			
+        			if(c != null){
+        				c.moveToFirst();
+        				n = c.getCount()+1;
+        			}else{
+        				n=1;
+        			}
+        			d.addAttempt(n, "F", Functions.getCompetitorID(),Functions.getActiveEvent());
+   				}else{
+   					Toast.makeText(getApplicationContext(), "Max attempts reached", Toast.LENGTH_SHORT).show();
+   				}
+       			}else{
+       					d.updateAttempt(Functions.getCompetitorID(),Functions.getActiveEvent(), "F", Functions.getAttemptNum());
+       					Functions.clearAttemptNum();
+       					
+       			}Functions.clearAttemptNum();
+   				
+    			
+    			onUpdate();
+   			
+   			d.close();
+   		}
+       	});
+       	Button pass = (Button)findViewById(R.id.passbtn);
+       	pass.setOnClickListener(new View.OnClickListener() {
+       		
+       		@Override
+       		public void onClick(View v) {
+       			// TODO Auto-generated method stub
+       			SchemaHelper d = new SchemaHelper(getApplicationContext());
+       			
        				Integer n = 0;
+       				Integer e = 100;
+       				Integer f = 0;
+       				Cursor z = d.showEventConf();
+       				for(Integer i=0;i<z.getCount();i++){
+       					System.out.println(z.getInt(0)+" "+z.getInt(1)+" "+z.getString(2)+" " +z.getString(3));
+       					z.moveToNext();
+       				}
+       				try{
+       				System.out.println("exe"+d.getEventID(Functions.getActiveEvent()).getInt(2));			
+       				e = Integer.parseInt(d.getEventConf(d.getEventID(Functions.getActiveEvent()).getInt(2), "ATTEMPTS"));
+       				System.out.println(e);
+       				f = d.attemptnum(Functions.getCompetitorID(), Functions.getActiveEvent());
+       				
+       				}catch(Exception ex){
+       					ex.printStackTrace();
+       				}
        				
        				if(Functions.getAttemptNum() == null){
+       					if(f < e+1){
             	        Cursor c = d.getAttempts(Functions.getCompetitorID(), Functions.getActiveEvent());
             			
             			if(c != null){
@@ -93,61 +166,24 @@ ListView myList;
             			}else{
             				n=1;
             			}
-            			d.addAttempt(n, "F", Functions.getCompetitorID(),Functions.getActiveEvent());
-           				}else{
-           					d.updateAttempt(Functions.getCompetitorID(),Functions.getActiveEvent(), "F", Functions.getAttemptNum());
+            			d.addAttempt(n, "P", Functions.getCompetitorID(),Functions.getActiveEvent());
+       					}else{
+           					Toast.makeText(getApplicationContext(), "Max attempts reached", Toast.LENGTH_SHORT).show();
+           				}
+           			}else{
+           					System.out.println(Functions.getCompetitorID()+Functions.getActiveEvent()+"P"+ Functions.getAttemptNum());
+           					d.updateAttempt(Functions.getCompetitorID(),Functions.getActiveEvent(), "P", Functions.getAttemptNum());
            					Functions.clearAttemptNum();
            					
-           				}
-        			d.close();
-        			onUpdate();
-       			}catch(Exception e){
-       				System.out.println(e);
-       			}
-       		}
-       	});
-       	Button pass = (Button)findViewById(R.id.passbtn);
-       	pass.setOnClickListener(new View.OnClickListener() {
-       		
-       		@Override
-       		public void onClick(View v) {
-       			// TODO Auto-generated method stub
-       			try{
-       				Integer n = 0;
+           			}Functions.clearAttemptNum();
        				
-       				if(Functions.getAttemptNum() == null){
-        	        Cursor c = d.getAttempts(Functions.getCompetitorID(), Functions.getActiveEvent());
         			
-        			if(c != null){
-        				c.moveToFirst();
-        				n = c.getCount()+1;
-        			}else{        				n=1;
-        			}
-        			//build in a check to make sure we dont allow too many attempts
-        			if(finals == true){
-        				Toast.makeText(getApplicationContext(), "General FAilure", Toast.LENGTH_LONG).show();
-        			}else{
-        			Integer attempts = Integer.parseInt(d.getEventConf(Functions.getActiveEvent(), "ATTEMPTS")); 
-        				if(n <= attempts){
-        					d.addAttempt(n, "P", Functions.getCompetitorID(),Functions.getActiveEvent());
-        					Toast.makeText(getApplicationContext(), "General FAilure", Toast.LENGTH_LONG).show();
-        				}else{
-        					Toast.makeText(getApplicationContext(), "Max Attempts Reached", Toast.LENGTH_SHORT).show();
-        				}
-        			}
-        			
-       				}else{
-       					System.out.println("UPDATE PASS");
-       					d.updateAttempt(Functions.getCompetitorID(),Functions.getActiveEvent(), "P", Functions.getAttemptNum());
-       					Functions.clearAttemptNum();
-       				}
-        			d.close();
         			onUpdate();
-       			}catch(Exception e){
-       				System.out.println(e);
-       			}
+       			
+       			d.close();
        		}
        	});
+       	//d.close();
 	}
 	protected void onRestart(){
 		super.onRestart();
@@ -158,12 +194,13 @@ ListView myList;
 	public void onUpdate(){
 		Integer competitorid = Functions.getCompetitorID();
         Integer eventid = Functions.getActiveEvent();
+        SchemaHelper d = new SchemaHelper(getApplicationContext());
 		try{
-	        SchemaHelper d = new SchemaHelper(getApplicationContext());
+	        
 	        Cursor c = d.getCompetitorById(competitorid);
 	        c.moveToFirst();
 	        TextView tv = (TextView) findViewById(R.id.competitorinfo);
-	        tv.setText(c.getString(1) + " " + c.getString(2) + "\n" + c.getString(3));
+	        tv.setText(c.getString(2) + " " + c.getString(3) + "\n" + c.getString(1));
 	        c.close();
 	        
 	        Cursor attempts =d.getAttempts(competitorid, eventid);
@@ -177,6 +214,7 @@ ListView myList;
 	        	competitorattempts[i] = attempts.getString(1) + " " + e;
 	        	attempts.moveToNext();
 	        }
+	        //Functions.setAttemptNum(a+2);
 	        attempts.close();
 	        myList  = (ListView)findViewById(R.id.listView1);
 	        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, competitorattempts);
@@ -197,10 +235,11 @@ ListView myList;
 	        
 	        
 	        
-	        d.close();
+	        
 	        }catch(Exception e){
 	        	e.printStackTrace();
 	        }
+	        d.close();
 	}
 	private Object listclick() {
 		// TODO Auto-generated method stub

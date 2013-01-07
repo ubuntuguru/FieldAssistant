@@ -1,23 +1,27 @@
 package com.lobsternetworks.android.fieldassistant;
 
+import android.R.color;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.lobsternetworks.android.fieldassistant.R;
 
 public class Input extends Activity{
-	SchemaHelper d = new SchemaHelper(getApplicationContext());
+	
 	
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		SharedPreferences sharedPreferences = getSharedPreferences("fielddroid", MODE_PRIVATE);
-	    String screen = sharedPreferences.getString("fielddroid:screen", "phone");
+		SharedPreferences sharedPreferences = getSharedPreferences("fieldassistant", MODE_PRIVATE);
+	    String screen = sharedPreferences.getString("fieldassistant:screen", "phone");
 	    if(screen.equals("phone")){
 	    	setContentView(R.layout.input);
 	    }else if(screen.equals("Tablet 10IN")){
@@ -336,6 +340,7 @@ public class Input extends Activity{
     		@Override
     		public void onClick(View v) {
     			// TODO Auto-generated method stub
+    			SchemaHelper d = new SchemaHelper(v.getContext());
     			Integer n = 0;
     			//try{
     				TextView distance = (TextView)findViewById(R.id.distance);
@@ -343,7 +348,7 @@ public class Input extends Activity{
 //    			Text = " ";
 //    			distance.setText(Text);
 
-    			
+    			Integer e = Integer.parseInt(d.getEventConf(d.getEventID(Functions.getActiveEvent()).getInt(2), "ATTEMPTS"));
 
     	        Cursor c = d.getAttempts(Functions.getCompetitorID(), Functions.getActiveEvent());
     			
@@ -353,17 +358,25 @@ public class Input extends Activity{
     			}else{
     				n=1;
     			}
-    			
+    			if(n<e+1){
     			System.out.println(Functions.getCompetitorID());
     			System.out.println(Functions.getActiveEvent());
     			Text = Text.replaceAll("'", "/'");
     			d.addAttempt(n, Text, Functions.getCompetitorID(),Functions.getActiveEvent());
     			d.close();
+    			finish();
+    			}else{
+    				Toast.makeText(getApplicationContext(), "Max attempts reached\nAttempt not Recorded", Toast.LENGTH_LONG).show();
+    				d.close();
+    				
+    				distance.setTextColor(Color.RED);
+    			}
+    			
     		//	}catch(Exception e){
     			//	e.printStackTrace();
     		//	}
-    			System.out.println("back to results");
-    			finish();
+//    			System.out.println("back to results");
+//    			finish();
     		}
     	});
     	
