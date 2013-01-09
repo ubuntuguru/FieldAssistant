@@ -51,7 +51,7 @@
         android:id="@+id/finals" 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:inputType="" />
+        android:inputType="number" />
 
     <TextView
         android:id="@+id/textView3"

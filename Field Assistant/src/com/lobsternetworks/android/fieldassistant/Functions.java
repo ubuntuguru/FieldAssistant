@@ -16,12 +16,12 @@ public class Functions extends Activity{
 	
 	
 	
-	public static Integer getExt_event_id() {
-		return ext_event_id;
+	public static void setExt_event_id(Integer event){
+		ext_event_id = event;
 	}
-
-	public static void setExt_event_id(Integer the_ext_event_id) {
-		the_ext_event_id = ext_event_id;
+		
+	public static Integer getExt_event_id(){
+		return ext_event_id;
 	}
 	static Integer ActiveEvent, CompetitorID;
 	static Integer attemptNum = null;

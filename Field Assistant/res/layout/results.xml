@@ -78,4 +78,12 @@
         android:layout_alignLeft="@+id/listView1"
         android:text="#                  Mark" />
 
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/clearbtn"
+        android:layout_below="@+id/clearbtn"
+        android:text="00" />
+
 </RelativeLayout>

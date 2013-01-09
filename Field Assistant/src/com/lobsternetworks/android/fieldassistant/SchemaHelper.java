@@ -24,7 +24,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "fieldAssistant.db";
 
 	// TOGGLE THIS NUMBER FOR UPDATING TABLES AND DATABASE
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 
 	SchemaHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -278,7 +278,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 
 	public String getEventConf(Integer eventid, String conf) {
 		SQLiteDatabase sd = getWritableDatabase();
-
+		System.out.println("event" + eventid);
 		// WE NEED TO RETURN ALL FIELDS
 		String[] columns = new String[] { DBEventConfTable.ID, DBEventConfTable.EVENT, DBEventConfTable.CONF, DBEventConfTable.DATA };
 
@@ -288,8 +288,25 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		Cursor c = sd.query(DBEventConfTable.TABLE_NAME, columns, "" + DBEventConfTable.EVENT + "= ? and " + DBEventConfTable.CONF + "= ? ", selectionArgs, null, null, null);
 		//Cursor c = sd.query(ClassTable.TABLE_NAME, columns,  + "= ? ", selectionArgs, null, null, null);
 		c.moveToFirst();
-		System.out.println(c.getCount());
+		System.out.println("getEventConf_count" + c.getCount());
 		return c.getString(3);
+	}
+
+	public Long updateEventConf(Integer eventid, String conf, String data) {
+		SQLiteDatabase sd = getWritableDatabase();
+		//CREATE A CONTENTVALUE OBJECT
+		ContentValues cv = new ContentValues();
+		cv.put(DBEventConfTable.DATA, data);
+		
+		//SETUP WHERE PARAMS
+		String where = DBEventConfTable.EVENT + " = ? AND " + DBEventConfTable.CONF + " = ?";
+		
+		//CREATE A CONTENTVALUE OBJECT FOR WHERE ARGS
+		String[] whereArgs = {String.valueOf(eventid), String.valueOf(conf)};
+		
+		// QUERY ALL EVENTS MATCHING EXT_EVENT_ID
+		long result = sd.update(DBEventConfTable.TABLE_NAME, cv, where, whereArgs);
+		return result;
 	}
 	
 	public long addAttempt(Integer attemptnum, String attempt, Integer competitorid, Integer eventid){
@@ -448,33 +465,33 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		return result;
 	}
 	
-	@SuppressLint("SimpleDateFormat")
-	public void backup(){
-		try {
-	        File sd = new File(Functions.getLocalPath());
-	        File data = Environment.getDataDirectory();
-	        Date dateNow = new Date ();
-	        
-	        SimpleDateFormat dateformatYYYYMMDD = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-	        StringBuilder dateStr = new StringBuilder( dateformatYYYYMMDD.format( dateNow ) );
-	        
-	        
-	        if (sd.canWrite()) {
-	            String currentDBPath = "/data/com.lobsternetworks.android.fieldassistant/" + DATABASE_NAME;
-	            String backupDBPath = dateStr + DATABASE_NAME;
-	            File currentDB = new File(data, currentDBPath);
-	            File backupDB = new File(sd, backupDBPath);
-
-	            if (currentDB.exists()) {
-	                FileChannel src = new FileInputStream(currentDB).getChannel();
-	                FileChannel dst = new FileOutputStream(backupDB).getChannel();
-	                dst.transferFrom(src, 0, src.size());
-	                src.close();
-	                dst.close();
-	            }
-	        }
-	    } catch (Exception e) {
-	    	e.printStackTrace();
-	    }
-	}
+//	@SuppressLint("SimpleDateFormat")
+//	public void backup(){
+//		try {
+//	        File sd = new File(Functions.getLocalPath());
+//	        File data = Environment.getDataDirectory();
+//	        Date dateNow = new Date ();
+//	        
+//	        SimpleDateFormat dateformatYYYYMMDD = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+//	        StringBuilder dateStr = new StringBuilder( dateformatYYYYMMDD.format( dateNow ) );
+//	        
+//	        
+//	        if (sd.canWrite()) {
+//	            String currentDBPath = "/data/com.lobsternetworks.android.fieldassistant/" + DATABASE_NAME;
+//	            String backupDBPath = dateStr + DATABASE_NAME;
+//	            File currentDB = new File(data, currentDBPath);
+//	            File backupDB = new File(sd, backupDBPath);
+//
+//	            if (currentDB.exists()) {
+//	                FileChannel src = new FileInputStream(currentDB).getChannel();
+//	                FileChannel dst = new FileOutputStream(backupDB).getChannel();
+//	                dst.transferFrom(src, 0, src.size());
+//	                src.close();
+//	                dst.close();
+//	            }
+//	        }
+//	    } catch (Exception e) {
+//	    	e.printStackTrace();
+//	    }
+//	}
 }

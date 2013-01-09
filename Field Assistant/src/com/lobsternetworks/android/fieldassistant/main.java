@@ -31,6 +31,7 @@ public class main extends ExpandableListActivity
 
     String[][] mListStringArray;
     String[] groups;
+    String[] groupsid;
     String[][] childs;
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -167,8 +168,8 @@ public class main extends ExpandableListActivity
   		    @Override
   		    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
   		    	if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-  		            int groupPosition = ExpandableListView.getPackedPositionGroup(id);
-  		            int childPosition = ExpandableListView.getPackedPositionChild(id);
+  		            final int groupPosition = ExpandableListView.getPackedPositionGroup(id);
+  		            final int childPosition = ExpandableListView.getPackedPositionChild(id);
   		          Toast.makeText(getApplicationContext(), "LONG" + groupPosition, Toast.LENGTH_SHORT).show();
   		          
   		          SchemaHelper sh = new SchemaHelper(getApplicationContext());
@@ -185,6 +186,8 @@ public class main extends ExpandableListActivity
   		    	    public void onClick(DialogInterface dialog, int item) {
   		    	    	Toast.makeText(getApplicationContext(), menu[item], Toast.LENGTH_SHORT).show();
   		    	    	if(item == 3){
+  		    	    		System.out.println("+"+Integer.parseInt(groupsid[groupPosition]));
+  		    	    		Functions.setExt_event_id(Integer.parseInt(groupsid[groupPosition]));
   		    	    		Intent intent = new Intent(main.this, SettingsDistanceActivity.class);
   		    				startActivityForResult(intent, 0);
   		    	    	}
@@ -258,6 +261,7 @@ public class main extends ExpandableListActivity
   		//events = new String[count-1];
 //   	 	String Text = "";
   		groups = new String[count];
+  		groupsid = new String[count];
   		Integer i =0;
   		c.moveToFirst();
   		for(int f = 0;f<count; f++){
@@ -266,6 +270,7 @@ public class main extends ExpandableListActivity
    	 		//"eventid", "id", "round", "flight", "event"
    	 	HashMap<String, String> map = new HashMap<String, String>();
    	 	groups[f] = c.getString(1);
+   	 	groupsid[f] = String.valueOf(c.getInt(0));
 		map.put("eventid", String.valueOf(c.getInt(0)));
 	    map.put("eventname", c.getString(1) );
 		result.add(map);

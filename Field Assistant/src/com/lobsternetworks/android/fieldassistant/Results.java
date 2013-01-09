@@ -3,12 +3,15 @@ package com.lobsternetworks.android.fieldassistant;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,9 +21,27 @@ import com.lobsternetworks.android.fieldassistant.R;
 public class Results extends Activity{
 	//SchemaHelper d = new SchemaHelper(getApplicationContext());
 ListView myList;
+//CountDownTimer cdt;
+CountDownTimer cdt = new CountDownTimer(30000, 1000) {
+	
+    public void onTick(long millis) {
+//        mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+    	TextView tv = (TextView)findViewById(R.id.timer);
+    	tv.setText(String.valueOf((millis/1000)));
+    }
+
+    public void onFinish() {
+  //      mTextField.setText("done!");
+    	TextView tv = (TextView)findViewById(R.id.timer);
+    	tv.setTextColor(Color.RED);
+    	tv.setText("0");
+    }
+ }.start();
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.results);
+        
+        
         
         String[] list = new String[] {"1 test", "2tester"};
         final Boolean finals = false;
@@ -191,6 +212,12 @@ ListView myList;
       	System.out.println("onRestart");
 		
 	}
+	
+	protected void onPause(){
+		super.onPause();
+		cdt.cancel();
+	}
+	
 	public void onUpdate(){
 		Integer competitorid = Functions.getCompetitorID();
         Integer eventid = Functions.getActiveEvent();

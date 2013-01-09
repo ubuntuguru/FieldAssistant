@@ -86,10 +86,10 @@ public class SelectEvent extends Activity{
 	    			EditText numfinals = (EditText)findViewById(R.id.finals);
 	    			EditText finalattempts = (EditText)findViewById(R.id.finalattempts);
 	    			System.out.println(Integer.parseInt(round));
-	    			sh.addEventConf(Integer.parseInt(round), "TYPE", String.valueOf(type.getSelectedItemPosition()));
-	    			sh.addEventConf(Integer.parseInt(round),"ATTEMPTS", attempts.getText().toString());
-	    			sh.addEventConf(Integer.parseInt(round),"NUMFINALS", numfinals.getText().toString());
-	    			sh.addEventConf(Integer.parseInt(round),"FINALATTEMPTS", finalattempts.getText().toString());
+	    			sh.addEventConf(Integer.parseInt(round), "event_type", String.valueOf(type.getSelectedItemPosition()));
+	    			sh.addEventConf(Integer.parseInt(round),"attempts", attempts.getText().toString());
+	    			sh.addEventConf(Integer.parseInt(round),"athletestofinal", numfinals.getText().toString());
+	    			sh.addEventConf(Integer.parseInt(round),"attemptsfinal", finalattempts.getText().toString());
 	    			sh.close();
 	    			
 	    			if(attempts.getText().length() > 0){
