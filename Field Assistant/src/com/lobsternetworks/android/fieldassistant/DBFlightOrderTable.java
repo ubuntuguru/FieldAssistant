@@ -27,6 +27,6 @@ public class DBFlightOrderTable {
     
     // THE TABLE SCHEMA
     public static final String SCHEMA = "CREATE TABLE " + TABLE_NAME + " (" + ID
-                + " INTEGER PRIMARY KEY AUTOINCREMENT," + COMPETITOR_ID + " INTEGER," + EVENT_ID
-                + " INTEGER);";
+                + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COMPETITOR_ID + " INTEGER, " + EVENT_ID
+                + " INTEGER, " +  STATUS_ID + " INTEGER, " + ATTEMPTS_COMPLETED + " INTEGER, " + ICON + " TEXT);";
 }

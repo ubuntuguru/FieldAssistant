@@ -64,7 +64,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:inputType="number" />
-
+
+
     <Button
         android:id="@+id/selecteventbutton"
         android:layout_width="fill_parent"

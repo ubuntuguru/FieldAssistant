@@ -260,7 +260,7 @@ public class FlightActivity extends Activity implements AdapterView.OnItemClickL
 	 	 		 //events[i]=  c.getInt(1) + "," + c.getInt(2) + "," + c.getInt(3) + "," + c.getString(4);
 
 	 	 		Cursor a = myDbHelper.getAttempts(c.getInt(0), Functions.getActiveEvent());
-	 	 		 addlvi(R.drawable.ic_launcher, R.drawable.pepper, c.getString(2) + ", " + c.getString(1), c.getString(3), c.getInt(0), a.getCount());
+	 	 		 addlvi(R.drawable.ic_launcher, R.drawable.pepper, c.getString(1) + ", " + c.getString(2), c.getString(3), c.getInt(0), a.getCount());
 	 	 		 //i++;
 	 	 		 c.moveToNext();
 	 	 	}
@@ -308,6 +308,8 @@ public class FlightActivity extends Activity implements AdapterView.OnItemClickL
     	return map;
     }
     public void whoisup(){
+    	FlightOrder fo = new FlightOrder();
+    	fo.reorder(getApplicationContext(), Functions.getActiveEvent(), null);
 //    	Integer j = listView.getCount();
 //    	
 //    	System.out.println("Blah Athletes "+ j);

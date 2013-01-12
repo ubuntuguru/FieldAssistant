@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -21,32 +22,46 @@ import com.lobsternetworks.android.fieldassistant.R;
 public class Results extends Activity{
 	//SchemaHelper d = new SchemaHelper(getApplicationContext());
 ListView myList;
-//CountDownTimer cdt;
-CountDownTimer cdt = new CountDownTimer(30000, 1000) {
-	
-    public void onTick(long millis) {
-//        mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
-    	TextView tv = (TextView)findViewById(R.id.timer);
-    	tv.setText(String.valueOf((millis/1000)));
-    }
-
-    public void onFinish() {
-  //      mTextField.setText("done!");
-    	TextView tv = (TextView)findViewById(R.id.timer);
-    	tv.setTextColor(Color.RED);
-    	tv.setText("0");
-    }
- }.start();
+static Long timer = (long) 60;
+CountDownTimer cdt = null;
+//private UpdateCountdownTask task;
+ 
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.results);
         
+        SchemaHelper sh = new SchemaHelper(this);
+        try{
+        timer = Long.getLong(sh.getEventConf(Functions.getExt_event_id(), "attempttimer"));
+        }catch(Exception e){
+        	e.printStackTrace();
+        }
+        sh.close();
+       
+        CountDownTimer cdt = new CountDownTimer(timer*1000, 100) {
+
+            @Override
+            public void onTick(long m) {
+            	//System.out.println(m);
+            	((TextView) findViewById(R.id.timer)).setText(""+m/1000+"     ");
+            }
+
+            @Override
+            public void onFinish() {
+                ((TextView) findViewById(R.id.timer)).setText("       0      ");
+                ((TextView) findViewById(R.id.timer)).setTextColor(Color.RED);
+                ((TextView) findViewById(R.id.timer)).setBackgroundColor(Color.WHITE);
+            }
+        };
+        cdt.start();
         
         
         String[] list = new String[] {"1 test", "2tester"};
         final Boolean finals = false;
         
         onUpdate();
+        
+       
         
         Button input = (Button)findViewById(R.id.inputbtn);
        	input.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +132,7 @@ CountDownTimer cdt = new CountDownTimer(30000, 1000) {
    				}
    				try{
    				System.out.println("exe"+d.getEventID(Functions.getActiveEvent()).getInt(2));			
-   				e = Integer.parseInt(d.getEventConf(d.getEventID(Functions.getActiveEvent()).getInt(2), "ATTEMPTS"));
+   				e = Integer.parseInt(d.getEventConf(d.getEventID(Functions.getActiveEvent()).getInt(2), "attempts"));
    				System.out.println(e);
    				f = d.attemptnum(Functions.getCompetitorID(), Functions.getActiveEvent());
    				
@@ -169,7 +184,7 @@ CountDownTimer cdt = new CountDownTimer(30000, 1000) {
        				}
        				try{
        				System.out.println("exe"+d.getEventID(Functions.getActiveEvent()).getInt(2));			
-       				e = Integer.parseInt(d.getEventConf(d.getEventID(Functions.getActiveEvent()).getInt(2), "ATTEMPTS"));
+       				e = Integer.parseInt(d.getEventConf(d.getEventID(Functions.getActiveEvent()).getInt(2), "attempts"));
        				System.out.println(e);
        				f = d.attemptnum(Functions.getCompetitorID(), Functions.getActiveEvent());
        				
@@ -206,6 +221,16 @@ CountDownTimer cdt = new CountDownTimer(30000, 1000) {
        	});
        	//d.close();
 	}
+	
+	protected void onStart(){
+		super.onStart();
+		 // new UpdateCountdownTask.execute();
+		
+        
+  //      task = new UpdateCountdownTask();
+  //      task.execute(millis);
+	}
+	
 	protected void onRestart(){
 		super.onRestart();
 		onUpdate();
@@ -215,7 +240,7 @@ CountDownTimer cdt = new CountDownTimer(30000, 1000) {
 	
 	protected void onPause(){
 		super.onPause();
-		cdt.cancel();
+		//cdt.cancel();
 	}
 	
 	public void onUpdate(){
@@ -227,7 +252,7 @@ CountDownTimer cdt = new CountDownTimer(30000, 1000) {
 	        Cursor c = d.getCompetitorById(competitorid);
 	        c.moveToFirst();
 	        TextView tv = (TextView) findViewById(R.id.competitorinfo);
-	        tv.setText(c.getString(2) + " " + c.getString(3) + "\n" + c.getString(1));
+	        tv.setText(c.getString(3) + " " + c.getString(2) + "\n" + c.getString(1));
 	        c.close();
 	        
 	        Cursor attempts =d.getAttempts(competitorid, eventid);
@@ -272,4 +297,6 @@ CountDownTimer cdt = new CountDownTimer(30000, 1000) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
 }

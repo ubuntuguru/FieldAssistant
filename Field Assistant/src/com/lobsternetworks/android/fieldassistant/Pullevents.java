@@ -78,7 +78,8 @@ public String[][] start(Context c, Integer eventid, Integer t){
 						   String dbcompetitor_id = String.valueOf(sh.addCompetitor(Integer.parseInt(foo[1]),foo[3].toString() , foo[4].toString(), foo[5].toString()));
 						   //Integer dbeventid = sh.getEvent_ID(eventid, Sec);
 						   //Integer dbcompetitorid = sh.getCompetitor_ID(Integer.parseInt(foo[1]));
-						   sh.addCompetitorEvent(Integer.parseInt(dbeventid), Integer.parseInt(dbcompetitor_id), Integer.parseInt(foo[2]));
+						   Long dbevent = sh.addCompetitorEvent(Integer.parseInt(dbeventid), Integer.parseInt(dbcompetitor_id), Integer.parseInt(foo[2]));
+						   sh.addFlightOrder(Integer.parseInt(dbeventid.toString()), Integer.parseInt(dbcompetitor_id), 0, 0, "0");
 					   }catch(Exception e){
 						   System.out.println(e);
 					   }

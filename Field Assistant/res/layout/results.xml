@@ -84,6 +84,8 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/clearbtn"
         android:layout_below="@+id/clearbtn"
+        android:textSize="20dp"
         android:text="00" />
+
 
 </RelativeLayout>

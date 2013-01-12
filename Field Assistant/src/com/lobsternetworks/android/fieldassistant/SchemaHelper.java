@@ -24,7 +24,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "fieldAssistant.db";
 
 	// TOGGLE THIS NUMBER FOR UPDATING TABLES AND DATABASE
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 1;
 
 	SchemaHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -43,6 +43,8 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		db.execSQL(DBEventConfTable.SCHEMA);
 		//CREATE EVENTS TABLE
 		db.execSQL(DBEventsTable.SCHEMA);
+		//CREATE FLIGHTORDER TABLE
+		db.execSQL(DBFlightOrderTable.SCHEMA);
 
 
 	}
@@ -58,6 +60,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		        db.execSQL("DROP TABLE IF EXISTS " + DBCompetitorTable.TABLE_NAME);
 		        db.execSQL("DROP TABLE IF EXISTS " + DBEventConfTable.TABLE_NAME);
 		        db.execSQL("DROP TABLE IF EXISTS " + DBEventsTable.TABLE_NAME);
+		        db.execSQL("DROP TABLE IF EXISTS " + DBFlightOrderTable.TABLE_NAME);
 		        
 
 		// CREATE NEW INSTANCE OF SCHEMA
@@ -320,6 +323,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		// RETRIEVE WRITEABLE DATABASE AND INSERT
 		SQLiteDatabase sd = getWritableDatabase();
 		long result = sd.insert(DBAttemptsDistanceTable.TABLE_NAME, DBAttemptsDistanceTable.COMPETITOR_ID, cv);
+		updateFlightOrderAttempts(competitorid, eventid, attemptnum);
 		return result;
 	}
 	
@@ -379,10 +383,11 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		cv.put(DBFlightOrderTable.COMPETITOR_ID, cid);
 		cv.put(DBFlightOrderTable.EVENT_ID, eventid);
 		cv.put(DBFlightOrderTable.ICON, icon);
-				
+				System.out.println(cid);
 		// RETRIEVE WRITEABLE DATABASE AND INSERT
 		SQLiteDatabase sd = getWritableDatabase();
 		long result = sd.insert(DBFlightOrderTable.TABLE_NAME, DBFlightOrderTable.COMPETITOR_ID, cv);
+		System.out.println(result);
 		return result;
 	}
 	
@@ -440,7 +445,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		String where = DBFlightOrderTable.COMPETITOR_ID + " = ? AND " + DBFlightOrderTable.EVENT_ID + " = ?";
 		
 		//CREATE A CONTENTVALUE OBJECT FOR WHERE ARGS
-		String[] whereArgs = {String.valueOf(competitorid), String.valueOf(eventid), String.valueOf(attempts)};
+		String[] whereArgs = {String.valueOf(competitorid), String.valueOf(eventid)};
 		
 		//RETRIEVE WRITEABLE DATABASE AND UPDATE
 		SQLiteDatabase sd = getWritableDatabase();
@@ -463,6 +468,36 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		SQLiteDatabase sd = getWritableDatabase();
 		long result = sd.update(DBFlightOrderTable.TABLE_NAME, cv, where, whereArgs);
 		return result;
+	}
+
+	public Cursor getFlightOrderByEvent(Integer eventid) {
+		// TODO Auto-generated method stub
+		SQLiteDatabase sd = getWritableDatabase();
+
+		// WE NEED TO RETURN ALL FIELDS
+		String[] columns = new String[] { DBFlightOrderTable.ID, DBFlightOrderTable.COMPETITOR_ID, DBFlightOrderTable.EVENT_ID, DBFlightOrderTable.STATUS_ID, DBFlightOrderTable.ATTEMPTS_COMPLETED, DBFlightOrderTable.ICON };
+
+		String[] selectionArgs = new String[] { String.valueOf(eventid)};
+
+		// QUERY ALL ATTEMPTS FOR THE SPECIFIED QUERY
+		Cursor c = sd.query(DBFlightOrderTable.TABLE_NAME, columns, DBFlightOrderTable.EVENT_ID + "= ? ", selectionArgs, null, null, null);
+		c.moveToFirst();
+		return c;
+	}
+	
+	public Cursor getFlightOrderByEventSorted(Integer eventid) {
+		// TODO Auto-generated method stub
+		SQLiteDatabase sd = getWritableDatabase();
+
+		// WE NEED TO RETURN ALL FIELDS
+		String[] columns = new String[] { DBFlightOrderTable.ID, DBFlightOrderTable.COMPETITOR_ID, DBFlightOrderTable.EVENT_ID, DBFlightOrderTable.STATUS_ID, DBFlightOrderTable.ATTEMPTS_COMPLETED, DBFlightOrderTable.ICON };
+
+		String[] selectionArgs = new String[] { String.valueOf(eventid)};
+
+		// QUERY ALL ATTEMPTS FOR THE SPECIFIED QUERY
+		Cursor c = sd.query(DBFlightOrderTable.TABLE_NAME, columns, DBFlightOrderTable.EVENT_ID + "= ? ORDER BY " + DBFlightOrderTable.ATTEMPTS_COMPLETED + ", "+ DBFlightOrderTable.ID, selectionArgs, null, null, null);
+		c.moveToFirst();
+		return c;
 	}
 	
 //	@SuppressLint("SimpleDateFormat")

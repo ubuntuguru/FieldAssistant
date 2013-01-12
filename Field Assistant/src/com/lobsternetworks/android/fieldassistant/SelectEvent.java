@@ -90,6 +90,7 @@ public class SelectEvent extends Activity{
 	    			sh.addEventConf(Integer.parseInt(round),"attempts", attempts.getText().toString());
 	    			sh.addEventConf(Integer.parseInt(round),"athletestofinal", numfinals.getText().toString());
 	    			sh.addEventConf(Integer.parseInt(round),"attemptsfinal", finalattempts.getText().toString());
+	    			sh.addEventConf(Integer.parseInt(round),"attempttimer", "60");
 	    			sh.close();
 	    			
 	    			if(attempts.getText().length() > 0){
