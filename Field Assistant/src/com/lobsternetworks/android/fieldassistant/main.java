@@ -75,16 +75,16 @@ public class main extends ExpandableListActivity
         setContentView(R.layout.eventevl);
         Settings s = new Settings();
         //DataBaseHelper myDbHelper = new DataBaseHelper(null);
-        SchemaHelper sh = new SchemaHelper(this);
-        Cursor c = sh.showEvents();
-        c.moveToFirst();
-        Integer count = c.getCount();
-        
-        System.out.println("eventcount"+ count);
-        for (int i=0;i<count;i++){
-        	System.out.println("eventid"+c.getInt(2));
-        }
-        sh.close();
+//        SchemaHelper sh = new SchemaHelper(this);
+//        Cursor c = sh.showEvents();
+//        c.moveToFirst();
+//        Integer count = c.getCount();
+//        
+//        System.out.println("eventcount"+ count);
+//        for (int i=0;i<count;i++){
+//        	System.out.println("eventid"+c.getInt(2));
+//        }
+//        sh.close();
         SharedPreferences sharedPreferences = getSharedPreferences("fieldassistant", MODE_PRIVATE);
 	    String thekey = sharedPreferences.getString("fieldassistant:localpath", "/data/data/com.lobsternetworks.android.fieldassistant/");
         Functions.setLocalPath(thekey);
@@ -92,7 +92,7 @@ public class main extends ExpandableListActivity
         System.out.println("my:" + Functions.getLocalPath());
         Functions.setSharePath(getPreference("fieldassistant:sharepath"));
         Functions.setServerIP(getPreference("fieldassistant:serverip"));
-        System.out.println("path" + getPreference("fieldassistant:localpath"));
+        //System.out.println("path" + getPreference("fieldassistant:localpath"));
 
         
         
@@ -170,6 +170,7 @@ public class main extends ExpandableListActivity
   		    	if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
   		            final int groupPosition = ExpandableListView.getPackedPositionGroup(id);
   		            final int childPosition = ExpandableListView.getPackedPositionChild(id);
+  		          Functions.setExt_event_id(Integer.parseInt(groupsid[groupPosition]));
   		          Toast.makeText(getApplicationContext(), "LONG" + groupPosition, Toast.LENGTH_SHORT).show();
   		          
   		          SchemaHelper sh = new SchemaHelper(getApplicationContext());
@@ -221,6 +222,7 @@ public class main extends ExpandableListActivity
       public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long id) {
     	  System.out.println("event " + Integer.parseInt(childs[groupPosition][childPosition]));
     	  Functions.setActiveEvent(Integer.parseInt(childs[groupPosition][childPosition]));
+    	  Functions.setExt_event_id(Integer.parseInt(groupsid[groupPosition]));
   		Toast.makeText(getApplicationContext(), "Short" + groupPosition + childPosition, Toast.LENGTH_SHORT).show();
   		Intent intent = new Intent(view.getContext(), FlightActivity.class);
 			startActivityForResult(intent, 0);
@@ -238,11 +240,11 @@ public class main extends ExpandableListActivity
       
       /* This function is called on expansion of the group */
       public void  onGroupExpand  (int groupPosition) {
-          try{
-               System.out.println("Group exapanding Listener => groupPosition = " + groupPosition);
-          }catch(Exception e){
-              System.out.println(" groupPosition Errrr +++ " + e.getMessage());
-          }
+//          try{
+//               System.out.println("Group exapanding Listener => groupPosition = " + groupPosition);
+//          }catch(Exception e){
+//              System.out.println(" groupPosition Errrr +++ " + e.getMessage());
+//          }
       }  
 	private List<HashMap<String, String>> createGroupList() {
 	  ArrayList<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
@@ -257,7 +259,7 @@ public class main extends ExpandableListActivity
    	 	c.moveToFirst();
   		Integer count = c.getCount();
   		//System.out.println();
-  		System.out.println("group"+count);
+  		//System.out.println("group"+count);
   		//events = new String[count-1];
 //   	 	String Text = "";
   		groups = new String[count];
@@ -303,16 +305,16 @@ public class main extends ExpandableListActivity
     		childs = new String[count_c][100];
 	for( int i = 0 ; i < count_c ; ++i ) {
 	  ArrayList<HashMap<String, String>> secList = new ArrayList<HashMap<String, String>>();
-	  System.out.println("Event " + c.getInt(0));
+	  //System.out.println("Event " + c.getInt(0));
 	  Cursor d = sh.getEvent(c.getInt(0));
 	  Integer count_d = d.getCount();
-	  System.out.println("athletes" + count_d);
+	  //System.out.println("athletes" + count_d);
 	  d.moveToFirst();
 	  for( int n = 0 ; n < count_d; n++ ) {
 	    HashMap<String, String> child = new HashMap<String, String>();
 		child.put( "round", "Round " + String.valueOf(d.getInt(3)) );
 	    child.put( "flight", "Flight " + String.valueOf(d.getInt(4)) );
-	    System.out.println("asdf"+d.getInt(0));
+	    //System.out.println("asdf"+d.getInt(0));
 	    childs[i][n] = String.valueOf(d.getInt(0)); 
 		secList.add( child );
 		d.moveToNext();

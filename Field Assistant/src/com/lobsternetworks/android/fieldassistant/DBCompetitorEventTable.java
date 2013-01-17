@@ -17,10 +17,10 @@ public class DBCompetitorEventTable {
 
     // COMPETITOR_ID
     public static final String COMPETITOR_ID = "competitor_id";
-    
+
     // TABLE_NAME
     public static final String TABLE_NAME= "competitorevent";
 
     // SCHEMA
-    public static final String SCHEMA = "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + PLACE + " INTEGER," + POSITION + " INTEGER, " + EVENT_ID + " INTEGER, " + COMPETITOR_ID + " INTEGER);";
+    public static final String SCHEMA = "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + PLACE + " INTEGER," + POSITION + " INTEGER, " + EVENT_ID + " INTEGER, " + COMPETITOR_ID + " INTEGER );";
 }

@@ -36,22 +36,24 @@ public class Functions extends Activity{
 		Functions.attemptNum = null;
 	}
 
-	public static Integer ivleftswitcher(Integer in){
+	public static Integer ivleftswitcher(String in){
 		Integer myint = 0;
-		if(in.equals(0)){
+		if(in.equalsIgnoreCase("up")){
 			myint = R.drawable.up;
-		}else if(in.equals(1)){
-			myint = R.drawable.od;
-		}else if(in.equals(2)){
-			myint = R.drawable.ith;
-		}else if(in.equals(3)){
-			myint = R.drawable.co;
-		}else if(in.equals(4)){
-			myint = R.drawable.done;
-		}else if(in.equals(5)){
-			myint = R.drawable.pepper;
-		}else{
+		}else if(in.equalsIgnoreCase("ondeck")){
+			myint = R.drawable.ondeck;
+		}else if(in.equalsIgnoreCase("onhold")){
+			myint = R.drawable.onhold;
+		}else if(in.equalsIgnoreCase("checkedout")){
+			myint = R.drawable.checkedout;
+		}else if(in.equalsIgnoreCase("suspend")){
+			myint = R.drawable.suspend;
+		}else if(in.equalsIgnoreCase("blank")){
+			myint = R.drawable.blank;
+		}else if(in.equalsIgnoreCase("ic_launcher")){
 			myint = R.drawable.ic_launcher;
+		}else{
+			myint = R.drawable.blank;
 		}
 		return myint;
 	}
@@ -147,6 +149,26 @@ public class Functions extends Activity{
 	}
 	public static String getServerIP(){
 		return serverip;
+	}
+	public static String parseResult(String r){
+		String ret = "";
+		if(r.equalsIgnoreCase("FOUL")){
+			ret = r;
+		}else if(r.equalsIgnoreCase("PASS")){
+			ret = r;
+		}else{
+			String[] a = r.split("'");
+			String[] b = (String[])a[1].split("\"");
+			ret = a[0] + "-" + b[0];
+		}
+		return ret;
+	}
+	
+	public static String attempt_comp(String rrr){
+		String[] a = rrr.split("'");
+		String[] b = (String[])a[1].split("\"");
+		return  a[0] + "." + ((Integer.parseInt(b[0]))/12);
+		
 	}
 
 }

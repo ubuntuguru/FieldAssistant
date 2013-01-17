@@ -22,11 +22,15 @@ public class DBFlightOrderTable {
     // ICON
     public static final String ICON = "icon";
     
+    //ACTIVE 
+    public static final String ACTIVE = "active";
+    
+    
     // THE NAME OF THE TABLE
     public static final String TABLE_NAME = "flightorder";
     
     // THE TABLE SCHEMA
     public static final String SCHEMA = "CREATE TABLE " + TABLE_NAME + " (" + ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COMPETITOR_ID + " INTEGER, " + EVENT_ID
-                + " INTEGER, " +  STATUS_ID + " INTEGER, " + ATTEMPTS_COMPLETED + " INTEGER, " + ICON + " TEXT);";
+                + " INTEGER, " +  STATUS_ID + " INTEGER, " + ATTEMPTS_COMPLETED + " INTEGER, " + ICON + " TEXT, " + ACTIVE + "INTEGER );";
 }

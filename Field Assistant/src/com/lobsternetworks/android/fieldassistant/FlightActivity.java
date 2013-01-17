@@ -34,41 +34,38 @@ public class FlightActivity extends Activity implements AdapterView.OnItemClickL
 	
 	ArrayList<HashMap<String,Object>> hashMapListForListView = new ArrayList<HashMap<String,Object>>();
 	public void onCreate(Bundle icicle){
+		System.out.println("oncreate");
 		super.onCreate(icicle);
 		setContentView(R.layout.listview);
 		listView = (ListView)findViewById(R.id.listview01);
 		
-		
-		SchemaHelper myDbHelper = new SchemaHelper(this);
-
-			
-			System.out.println("db open fa");
-			System.out.println("event" + Functions.getActiveEvent());
-	 	 	Cursor c = myDbHelper.getCompetitorFromEventId(Functions.getActiveEvent());
-	 	 	System.out.println("total" + myDbHelper.showCompetitorevent().getCount());
-	 	 	Cursor f = myDbHelper.showCompetitorevent();
-	 	 	f.moveToFirst();
-	 	 	for(Integer i=0;i<f.getCount();i++){
-	 	 		System.out.println("_"+f.getInt(1)+" _ "+f.getInt(2));
-	 	 		f.moveToNext();
-	 	 	}
-	 	 	
-	 	 	System.out.println("athlete_count:"+c.getCount());
-	 	 	Integer drawable;
-	 	 	for(Integer i = 0;i<c.getCount();i++){
-	 	 		System.out.println(c.getString(3));
-	 	 		 //events[i]=  c.getInt(1) + "," + c.getInt(2) + "," + c.getInt(3) + "," + c.getString(4);
-
-	 	 		Cursor a = myDbHelper.getAttempts(c.getInt(0), Functions.getActiveEvent());
-	 	 		 addlvi(R.drawable.ic_launcher, R.drawable.pepper, c.getString(2) + ", " + c.getString(1), c.getString(3), c.getInt(0), a.getCount());
-	 	 		 //i++;
-	 	 		 c.moveToNext();
-	 	 	}
-	 	 	try{
-	 	 	myDbHelper.close();
-	 	 	}catch(Exception e){
-	 	 		
-	 	 	}
+			//whoisup();
+//		SchemaHelper myDbHelper = new SchemaHelper(this);
+//
+//			
+//			//System.out.println("db open fa");
+//			//System.out.println("event" + Functions.getActiveEvent());
+//	 	 	Cursor c = myDbHelper.getCompetitorFromEventId(Functions.getActiveEvent());
+//	 	 	//System.out.println("total" + myDbHelper.showCompetitorevent().getCount());
+//	 	 	
+//	 	 	
+//	 	 	//System.out.println("athlete_count:"+c.getCount());
+//	 	 	Integer drawable;
+//	 	 	for(Integer i = 0;i<c.getCount();i++){
+//	 	 		//System.out.println(c.getString(3));
+//	 	 		 //events[i]=  c.getInt(1) + "," + c.getInt(2) + "," + c.getInt(3) + "," + c.getString(4);
+//
+//	 	 		Cursor a = myDbHelper.getAttempts(c.getInt(0), Functions.getActiveEvent());
+//	 	 		 addlvi(R.drawable.blank, c.getString(2) + ", " + c.getString(1), c.getString(3), c.getInt(0), a.getCount(), c.getInt(0), c.getString(6));
+//	 	 		 //i++;
+//	 	 		 c.moveToNext();
+//	 	 	}
+//	 	 	try{
+//	 	 	myDbHelper.close();
+//	 	 	}catch(Exception e){
+//	 	 		
+//	 	 	}
+	 	 	addlvi(R.drawable.blank, "test" + ", " + "test", "test", 0, 0, 0, "blank");
 //			for(Integer i=0;i < 5; i++){
 //			addlvi(Functions.ivleftswitcher(i),  R.drawable.ic_launcher, "Athlete, An");
 //			}
@@ -105,13 +102,14 @@ public class FlightActivity extends Activity implements AdapterView.OnItemClickL
         });
 
 
-		whoisup();
-		rebuild();
+		//whoisup();
+		//rebuild();
 	}
 
     public void onClick(View v) {
         switch(v.getId()) {
         case R.id.left:
+        	onLongListItemClick(v, activeposition, activeposition);
             Toast.makeText(this, "Left Accessory "+v.getTag(), Toast.LENGTH_SHORT).show();
             break;
         case R.id.right:
@@ -149,18 +147,20 @@ public class FlightActivity extends Activity implements AdapterView.OnItemClickL
     	AlertDialog alert = builder.create();
     	alert.show();
     }
-    public void addlvi(Integer ivleft, Integer ivright, String competitor, String School, Integer id, Integer attempts){
+    public void addlvi(Integer ivright, String competitor, String School, Integer id, Integer attempts, Integer cid, String icon){
     	HashMap<String, Object> entitiesHashMap = new HashMap<String, Object>();
-		entitiesHashMap.put("ivleft", ivleft);
+		entitiesHashMap.put("ivleft", Functions.ivleftswitcher(icon));
 		entitiesHashMap.put("competitor", competitor);
-		entitiesHashMap.put("ivright", R.drawable.pepper);
+		entitiesHashMap.put("ivright", R.drawable.blank);
 		entitiesHashMap.put("text1", School);
 		entitiesHashMap.put("id", id);
 		entitiesHashMap.put("attempts", attempts);
+		entitiesHashMap.put("cid", cid);
 		hashMapListForListView.add(entitiesHashMap);
+		//System.out.println("Added: "+competitor+icon+Functions.ivleftswitcher(icon));
     }
     
-    public void updateivleft(Integer blah){
+    public void updateivleft(String blah){
     	Map map = (Map)listView.getItemAtPosition(activeposition);
     	
     	map.put("ivleft", Functions.ivleftswitcher(blah));   
@@ -185,16 +185,31 @@ public class FlightActivity extends Activity implements AdapterView.OnItemClickL
     	builder.setItems(menu, new DialogInterface.OnClickListener() {
     	    public void onClick(DialogInterface dialog, int item) {
     	    	if(item == 0){
-    	    		//checkin();
+    	    		Map map = (Map)listView.getItemAtPosition(activeposition);
+    	    		Integer cid = (Integer)map.get("cid");
+    	    		SchemaHelper sh = new SchemaHelper(getApplicationContext());
+    	    		sh.updateFlightOrderStatus(cid, Functions.getActiveEvent(), 0);
+    	    		sh.close();
     	    	}else if(item == 1){
-    	    		updateivleft(3);
+    	    		Map map = (Map)listView.getItemAtPosition(activeposition);
+    	    		Integer cid = (Integer)map.get("cid");
+    	    		SchemaHelper sh = new SchemaHelper(getApplicationContext());
+    	    		sh.updateFlightOrderStatus(cid, Functions.getActiveEvent(), 1);
+    	    		sh.close();
+    	    		//updateivleft(3);
+    	    		//rebuild();
     	    	}else if(item == 2){
-    	    		updateivleft(5);
+    	    		Map map = (Map)listView.getItemAtPosition(activeposition);
+    	    		Integer cid = (Integer)map.get("cid");
+    	    		SchemaHelper sh = new SchemaHelper(getApplicationContext());
+    	    		sh.updateFlightOrderStatus(cid, Functions.getActiveEvent(), 2);
+    	    		sh.close();
     	    	}else if(item == 3){
-    	    		updateivleft(0);
+    	    		//updateivleft(0);
     	    	}
+    	    	repull();
     	    	rebuild();
-    	        Toast.makeText(getApplicationContext(), menu[item], Toast.LENGTH_SHORT).show();
+    	        //Toast.makeText(getApplicationContext(), menu[item], Toast.LENGTH_SHORT).show();
     	    }
     	});
     	AlertDialog alert = builder.create();
@@ -212,12 +227,15 @@ public class FlightActivity extends Activity implements AdapterView.OnItemClickL
     	super.onRestart();
     	System.out.println("onRestart");
     	repull();
-    	whoisup();
-    	rebuild();
+    	//whoisup();
+    	//rebuild();
     }
 
     protected void onResume(){
     	super.onResume();
+    	
+    	//whoisup();
+    	
     	onRestart();
     	rebuild();
     	System.out.println("onResume");
@@ -245,13 +263,14 @@ public class FlightActivity extends Activity implements AdapterView.OnItemClickL
     }
         
     public void repull(){
+    	System.out.println("repull");
     	hashMapListForListView.clear();
 
         SchemaHelper myDbHelper = new SchemaHelper(this);
 		try{
-			
-			System.out.println("db open fa");
-			System.out.println(Functions.getActiveEvent());
+			whoisup();
+			//System.out.println("db open fa");
+			//System.out.println(Functions.getActiveEvent());
 	 	 	Cursor c = myDbHelper.getCompetitorFromEventId(Functions.getActiveEvent());
 	 	 	System.out.println("did i die here?");
 	 	 	Integer drawable;
@@ -260,7 +279,7 @@ public class FlightActivity extends Activity implements AdapterView.OnItemClickL
 	 	 		 //events[i]=  c.getInt(1) + "," + c.getInt(2) + "," + c.getInt(3) + "," + c.getString(4);
 
 	 	 		Cursor a = myDbHelper.getAttempts(c.getInt(0), Functions.getActiveEvent());
-	 	 		 addlvi(R.drawable.ic_launcher, R.drawable.pepper, c.getString(1) + ", " + c.getString(2), c.getString(3), c.getInt(0), a.getCount());
+	 	 		 addlvi(R.drawable.blank, c.getString(1) + ", " + c.getString(2), c.getString(3), c.getInt(0), a.getCount(), c.getInt(0), c.getString(6));
 	 	 		 //i++;
 	 	 		 c.moveToNext();
 	 	 	}
@@ -271,7 +290,7 @@ public class FlightActivity extends Activity implements AdapterView.OnItemClickL
     }
     
     public void rebuild(){
-    	
+    	System.out.println("rebuild");
 
     	SimpleAdapter adapterForList = new SimpleAdapter(this,
                 hashMapListForListView, R.layout.row_view,
@@ -308,54 +327,9 @@ public class FlightActivity extends Activity implements AdapterView.OnItemClickL
     	return map;
     }
     public void whoisup(){
+    	System.out.println("whoisup");
     	FlightOrder fo = new FlightOrder();
-    	fo.reorder(getApplicationContext(), Functions.getActiveEvent(), null);
-//    	Integer j = listView.getCount();
-//    	
-//    	System.out.println("Blah Athletes "+ j);
-//    	Integer i;
-//    	for(i=1;i<j;i++){
-//    	Map a = (Map)listView.getItemAtPosition(i-1);
-//    	System.out.println("a"+(i-1)+"  " + a.get("attempts"));
-//    	Map b = (Map)listView.getItemAtPosition(i);
-//    	System.out.println("b"+(i)+"  " + b.get("attempts"));
-//    	if(Integer.parseInt(a.get("attempts").toString()) > Integer.parseInt(b.get("attempts").toString())){
-//
-//    		System.out.println("a is up");
-//    		b.put("ivleft", R.drawable.up);
-//    		System.out.println("ath:" + i);
-//    		up=1;
-//    		Integer cpos = i+1;
-//    		Integer dpos = i+2;
-//    		if (cpos ==j){cpos=0;dpos=1;}
-//    		Map c = getmap(cpos);
-//    		c.put("ivleft", R.drawable.od);
-//    		
-//    		if (dpos ==j){dpos=0;}
-//    		Map d = getmap(dpos);
-//    		d.put("ivleft", R.drawable.ith);
-//    		i=j+10;
-//    		
-//    	}
-//    	}
-//    	if(up == 0){
-//    		//Map f = getmap(0);
-//    		Map f = (Map)listView.getItemAtPosition(0);
-//    		//try{
-//    		f.remove("ivleft");
-//    		f.put("ivleft", R.drawable.up);
-//    		Map b = getmap(1);
-//    		b.remove("ivleft");
-//    		b.put("ivleft", R.drawable.od);
-//    		Map c = getmap(2);
-//    		c.remove("ivleft");
-//    		c.put("ivleft", R.drawable.ith);
-////    		}catch(Exception e){
-////    			System.out.println(e);
-////    			e.printStackTrace();
-////    		}
-//    	
-//    	}
+    	fo.reorder(getApplicationContext(), Functions.getActiveEvent(), 1);
     }
 
 

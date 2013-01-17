@@ -79,6 +79,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		db.execSQL("DELETE FROM " + DBCompetitorTable.TABLE_NAME);
 		db.execSQL("DELETE FROM " + DBEventConfTable.TABLE_NAME);
 		db.execSQL("DELETE FROM " + DBEventsTable.TABLE_NAME);
+		db.execSQL("DELETE FROM " + DBFlightOrderTable.TABLE_NAME);
 	}
 	
 	public long addCompetitor(Integer cid, String first, String last, String team) {
@@ -162,7 +163,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 
 	public Cursor getEvent(Integer eventid) {
 		SQLiteDatabase sd = getWritableDatabase();
-		System.out.println("DC"+ eventid);
+		//System.out.println("DC"+ eventid);
 		// WE NEED TO RETURN ALL FIELDS
 		String[] columns = new String[] { DBEventsTable.ID, DBEventsTable.EVENT_TYPE, DBEventsTable.EXT_EVENT_ID, DBEventsTable.ROUND, DBEventsTable.FLIGHT, DBEventsTable.EVENT };
 
@@ -171,14 +172,14 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		// QUERY ALL EVENTS MATCHING EXT_EVENT_ID
 		Cursor c = sd.query(DBEventsTable.TABLE_NAME, columns, DBEventsTable.EXT_EVENT_ID + "=?", selectionArgs, null, null, null);
 		//Cursor c = sd.query(ClassTable.TABLE_NAME, columns,  + "= ? ", selectionArgs, null, null, null);
-		System.out.println("db"+c.getCount());
+		//System.out.println("db"+c.getCount());
 		c.moveToFirst();
 		return c;
 	}
 
 	public Cursor getEventID(Integer eventid) {
 		SQLiteDatabase sd = getWritableDatabase();
-		System.out.println("DC"+ eventid);
+		//System.out.println("DC"+ eventid);
 		// WE NEED TO RETURN ALL FIELDS
 		String[] columns = new String[] { DBEventsTable.ID, DBEventsTable.EVENT_TYPE, DBEventsTable.EXT_EVENT_ID, DBEventsTable.ROUND, DBEventsTable.FLIGHT, DBEventsTable.EVENT };
 
@@ -187,7 +188,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		// QUERY ALL EVENTS MATCHING EXT_EVENT_ID
 		Cursor c = sd.query(DBEventsTable.TABLE_NAME, columns, DBEventsTable.ID + "=?", selectionArgs, null, null, null);
 		//Cursor c = sd.query(ClassTable.TABLE_NAME, columns,  + "= ? ", selectionArgs, null, null, null);
-		System.out.println("db"+c.getCount());
+		//System.out.println("db"+c.getCount());
 		c.moveToFirst();
 		return c;
 	}
@@ -228,14 +229,18 @@ public class SchemaHelper extends SQLiteOpenHelper {
 
 		// QUERY ALL EVENTS MATCHING EXT_EVENT_ID
 		//String query ="SELECT " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.ID + ", " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.FIRSTNAME + ", " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.LASTNAME + ", " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.TEAM + ", " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.EXT_COMPETITOR_ID + ", " + DBCompetitorEventTable.TABLE_NAME + "." + DBCompetitorEventTable.POSITION +
-		String query ="SELECT " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.ID + ", " + DBCompetitorTable.FIRSTNAME + ", " + DBCompetitorTable.LASTNAME + ", " + DBCompetitorTable.TEAM + ", " + DBCompetitorTable.EXT_COMPETITOR_ID + ", " + DBCompetitorEventTable.POSITION +
+		String query ="SELECT " + DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.ID + ", " + DBCompetitorTable.FIRSTNAME + ", " + DBCompetitorTable.LASTNAME + ", " + DBCompetitorTable.TEAM + ", " + DBCompetitorTable.EXT_COMPETITOR_ID + ", " + DBCompetitorEventTable.POSITION + ", " + DBFlightOrderTable.TABLE_NAME + "." + DBFlightOrderTable.ICON +
 		" FROM " + DBCompetitorTable.TABLE_NAME + " LEFT OUTER JOIN " + DBCompetitorEventTable.TABLE_NAME + 
 		" ON " + 
 		DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.ID + "=" + DBCompetitorEventTable.TABLE_NAME + "." + DBCompetitorEventTable.COMPETITOR_ID+
+		" JOIN " + DBFlightOrderTable.TABLE_NAME + 
+		" ON " + 
+		DBCompetitorTable.TABLE_NAME + "." + DBCompetitorTable.ID + "=" + DBFlightOrderTable.TABLE_NAME + "." + DBFlightOrderTable.COMPETITOR_ID+
 		//+ "' AND '"
 		" WHERE " + 
-		DBCompetitorEventTable.EVENT_ID + "= ?"; 
-		System.out.println(query);
+		DBCompetitorEventTable.TABLE_NAME + "." + DBCompetitorEventTable.EVENT_ID + "=" + DBFlightOrderTable.TABLE_NAME + "." + DBFlightOrderTable.EVENT_ID + " AND " +
+		DBCompetitorEventTable.TABLE_NAME + "." + DBCompetitorEventTable.EVENT_ID + "= ?"; 
+		//System.out.println(query);
 		Cursor c = sd.rawQuery(query, selectionArgs);
 		c.moveToFirst();
 		return c;
@@ -266,6 +271,8 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		return result;
 	}
 	
+
+	
 	public long addEventConf(Integer event, String conf, String data) {
 		// CREATE A CONTENTVALUE OBJECT
 		ContentValues cv = new ContentValues();
@@ -281,7 +288,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 
 	public String getEventConf(Integer eventid, String conf) {
 		SQLiteDatabase sd = getWritableDatabase();
-		System.out.println("event" + eventid);
+		//System.out.println("event" + eventid);
 		// WE NEED TO RETURN ALL FIELDS
 		String[] columns = new String[] { DBEventConfTable.ID, DBEventConfTable.EVENT, DBEventConfTable.CONF, DBEventConfTable.DATA };
 
@@ -291,7 +298,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		Cursor c = sd.query(DBEventConfTable.TABLE_NAME, columns, "" + DBEventConfTable.EVENT + "= ? and " + DBEventConfTable.CONF + "= ? ", selectionArgs, null, null, null);
 		//Cursor c = sd.query(ClassTable.TABLE_NAME, columns,  + "= ? ", selectionArgs, null, null, null);
 		c.moveToFirst();
-		System.out.println("getEventConf_count" + c.getCount());
+		//System.out.println("getEventConf_count" + c.getCount());
 		return c.getString(3);
 	}
 
@@ -383,11 +390,11 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		cv.put(DBFlightOrderTable.COMPETITOR_ID, cid);
 		cv.put(DBFlightOrderTable.EVENT_ID, eventid);
 		cv.put(DBFlightOrderTable.ICON, icon);
-				System.out.println(cid);
+				//System.out.println(cid);
 		// RETRIEVE WRITEABLE DATABASE AND INSERT
 		SQLiteDatabase sd = getWritableDatabase();
 		long result = sd.insert(DBFlightOrderTable.TABLE_NAME, DBFlightOrderTable.COMPETITOR_ID, cv);
-		System.out.println(result);
+		//System.out.println(result);
 		return result;
 	}
 	
@@ -425,10 +432,10 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		cv.put(DBFlightOrderTable.STATUS_ID, status);
 		
 		//SETUP WHERE PARAMS
-		String where = DBFlightOrderTable.COMPETITOR_ID + " = ? AND " + DBFlightOrderTable.EVENT_ID + " = ?";
+		String where = DBFlightOrderTable.COMPETITOR_ID + " = ? AND " + DBFlightOrderTable.EVENT_ID + " = ? ";
 		
 		//CREATE A CONTENTVALUE OBJECT FOR WHERE ARGS
-		String[] whereArgs = {String.valueOf(competitorid), String.valueOf(eventid), String.valueOf(status)};
+		String[] whereArgs = {String.valueOf(competitorid), String.valueOf(eventid)};
 		
 		//RETRIEVE WRITEABLE DATABASE AND UPDATE
 		SQLiteDatabase sd = getWritableDatabase();
@@ -462,7 +469,7 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		String where = DBFlightOrderTable.COMPETITOR_ID + " = ? AND " + DBFlightOrderTable.EVENT_ID + " = ?";
 		
 		//CREATE A CONTENTVALUE OBJECT FOR WHERE ARGS
-		String[] whereArgs = {String.valueOf(competitorid), String.valueOf(eventid), String.valueOf(icon)};
+		String[] whereArgs = {String.valueOf(competitorid), String.valueOf(eventid)};
 		
 		//RETRIEVE WRITEABLE DATABASE AND UPDATE
 		SQLiteDatabase sd = getWritableDatabase();
@@ -495,10 +502,41 @@ public class SchemaHelper extends SQLiteOpenHelper {
 		String[] selectionArgs = new String[] { String.valueOf(eventid)};
 
 		// QUERY ALL ATTEMPTS FOR THE SPECIFIED QUERY
-		Cursor c = sd.query(DBFlightOrderTable.TABLE_NAME, columns, DBFlightOrderTable.EVENT_ID + "= ? ORDER BY " + DBFlightOrderTable.ATTEMPTS_COMPLETED + ", "+ DBFlightOrderTable.ID, selectionArgs, null, null, null);
+		Cursor c = sd.query(DBFlightOrderTable.TABLE_NAME, columns, DBFlightOrderTable.STATUS_ID + " = 1 AND " + DBFlightOrderTable.EVENT_ID + "= ? ORDER BY " + DBFlightOrderTable.ATTEMPTS_COMPLETED + ", "+ DBFlightOrderTable.ID, selectionArgs, null, null, null);
 		c.moveToFirst();
 		return c;
 	}
+	
+	public Cursor getFlightOrderByEventSortedNA(Integer eventid) {
+		// TODO Auto-generated method stub
+		SQLiteDatabase sd = getWritableDatabase();
+
+		// WE NEED TO RETURN ALL FIELDS
+		String[] columns = new String[] { DBFlightOrderTable.ID, DBFlightOrderTable.COMPETITOR_ID, DBFlightOrderTable.EVENT_ID, DBFlightOrderTable.STATUS_ID, DBFlightOrderTable.ATTEMPTS_COMPLETED, DBFlightOrderTable.ICON };
+
+		String[] selectionArgs = new String[] { String.valueOf(eventid)};
+
+		// QUERY ALL ATTEMPTS FOR THE SPECIFIED QUERY
+		Cursor c = sd.query(DBFlightOrderTable.TABLE_NAME, columns, "(" + DBFlightOrderTable.STATUS_ID + " = 0 OR " + DBFlightOrderTable.STATUS_ID + " = 2 ) AND " + DBFlightOrderTable.EVENT_ID + "= ? ORDER BY " + DBFlightOrderTable.ATTEMPTS_COMPLETED + ", "+ DBFlightOrderTable.ID, selectionArgs, null, null, null);
+		c.moveToFirst();
+		return c;
+	}
+	
+	public Cursor standings(Integer eventid) {
+		// TODO Auto-generated method stub
+		SQLiteDatabase sd = getWritableDatabase();
+
+		// WE NEED TO RETURN ALL FIELDS
+		String[] columns = new String[] { DBFlightOrderTable.ID, DBFlightOrderTable.COMPETITOR_ID, DBFlightOrderTable.EVENT_ID, DBFlightOrderTable.STATUS_ID, DBFlightOrderTable.ATTEMPTS_COMPLETED, DBFlightOrderTable.ICON };
+
+		String[] selectionArgs = new String[] { String.valueOf(eventid)};
+
+		// QUERY ALL ATTEMPTS FOR THE SPECIFIED QUERY
+		Cursor c = sd.query(DBFlightOrderTable.TABLE_NAME, columns, "(" + DBFlightOrderTable.STATUS_ID + " = 0 OR " + DBFlightOrderTable.STATUS_ID + " = 2 ) AND " + DBFlightOrderTable.EVENT_ID + "= ? ORDER BY " + DBFlightOrderTable.ATTEMPTS_COMPLETED + ", "+ DBFlightOrderTable.ID, selectionArgs, null, null, null);
+		c.moveToFirst();
+		return c;
+	}
+	
 	
 //	@SuppressLint("SimpleDateFormat")
 //	public void backup(){

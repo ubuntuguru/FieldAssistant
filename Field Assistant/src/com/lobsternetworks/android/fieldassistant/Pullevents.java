@@ -79,7 +79,7 @@ public String[][] start(Context c, Integer eventid, Integer t){
 						   //Integer dbeventid = sh.getEvent_ID(eventid, Sec);
 						   //Integer dbcompetitorid = sh.getCompetitor_ID(Integer.parseInt(foo[1]));
 						   Long dbevent = sh.addCompetitorEvent(Integer.parseInt(dbeventid), Integer.parseInt(dbcompetitor_id), Integer.parseInt(foo[2]));
-						   sh.addFlightOrder(Integer.parseInt(dbeventid.toString()), Integer.parseInt(dbcompetitor_id), 0, 0, "0");
+						   sh.addFlightOrder(Integer.parseInt(dbeventid.toString()), Integer.parseInt(dbcompetitor_id), 0, 0, "blank");
 					   }catch(Exception e){
 						   System.out.println(e);
 					   }

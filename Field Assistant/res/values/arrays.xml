@@ -5,8 +5,6 @@
         <item>No Show</item>
         <item>Check In</item>
         <item>Suspend</item>
-        <item>Up Next</item>
-
     </string-array>
     <string-array name="rightclick">
         <item>Foul</item>
@@ -22,8 +20,6 @@
         <item>Setup Event</item>
     </string-array>
     <string-array name="event_type">
-	    <item>Pole Vault</item>
-	    <item>High Jump</item>
 	    <item>Horizontal Jumps</item>
 	    <item>Throws</item>
     </string-array>
@@ -46,7 +42,9 @@
 	    <item>8</item>
 	    <item>9</item>
     </string-array>
-    <string-array name="status_id">
+    <string-array name="status">
+        <item>Checked Out</item>
+        <item>Checked In</item>
         <item></item>
     </string-array>
 </resources>

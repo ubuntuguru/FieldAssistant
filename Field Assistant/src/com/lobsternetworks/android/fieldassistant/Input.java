@@ -347,10 +347,12 @@ public class Input extends Activity{
     			String Text = distance.getText().toString();
 //    			Text = " ";
 //    			distance.setText(Text);
-
-    			Integer e = Integer.parseInt(d.getEventConf(d.getEventID(Functions.getActiveEvent()).getInt(2), "ATTEMPTS"));
-
-    	        Cursor c = d.getAttempts(Functions.getCompetitorID(), Functions.getActiveEvent());
+    			Integer e=0;
+    			System.out.println("ass"+d.getEventID(Functions.getActiveEvent()).getInt(2));
+    		
+    			e = Integer.parseInt(d.getEventConf(d.getEventID(Functions.getActiveEvent()).getInt(2), "attempts"));
+    		
+    			Cursor c = d.getAttempts(Functions.getCompetitorID(), Functions.getActiveEvent());
     			
     			if(c != null){
     				c.moveToFirst();
@@ -358,10 +360,13 @@ public class Input extends Activity{
     			}else{
     				n=1;
     			}
+    			try{
+    				
     			if(n<e+1){
     			System.out.println(Functions.getCompetitorID());
     			System.out.println(Functions.getActiveEvent());
-    			Text = Text.replaceAll("'", "/'");
+    			Text = Text.replaceAll("'", "-");
+    			Text = Text.replaceAll("\"", "");
     			d.addAttempt(n, Text, Functions.getCompetitorID(),Functions.getActiveEvent());
     			d.close();
     			finish();
@@ -371,7 +376,9 @@ public class Input extends Activity{
     				
     				distance.setTextColor(Color.RED);
     			}
-    			
+    			}catch(Exception ex){
+    			ex.printStackTrace();	
+    			}
     		//	}catch(Exception e){
     			//	e.printStackTrace();
     		//	}

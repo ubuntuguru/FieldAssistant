@@ -2,6 +2,7 @@ package com.lobsternetworks.android.fieldassistant;
 
 import java.io.File;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,10 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.lobsternetworks.android.fieldassistant.R;
 
+@SuppressLint("NewApi")
 public class Settings extends Activity {
 
 	
-	 public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.settings);
 	        //SavePreferences(null, null);
@@ -40,6 +42,7 @@ public class Settings extends Activity {
 	        smb_autoconnect.setChecked(Boolean.parseBoolean(getPreference("fielddroid:smb_autoconnect")));
 	        TextView path = (TextView)findViewById(R.id.storagepath);
 	        String pathview = path.getText().toString();
+	        System.out.println(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString());
 	        path.setText(pathview + Environment.getExternalStorageDirectory().toString());
 	        System.out.println(Environment.getExternalStorageDirectory().toString());
 	        

@@ -31,13 +31,11 @@ CountDownTimer cdt = null;
         setContentView(R.layout.results);
         
         SchemaHelper sh = new SchemaHelper(this);
-        try{
-        timer = Long.getLong(sh.getEventConf(Functions.getExt_event_id(), "attempttimer"));
-        }catch(Exception e){
-        	e.printStackTrace();
-        }
+        
+        timer = Long.valueOf(sh.getEventConf(Functions.getExt_event_id(), "attempttimer"));
+        
         sh.close();
-       
+       try{
         CountDownTimer cdt = new CountDownTimer(timer*1000, 100) {
 
             @Override
@@ -54,7 +52,9 @@ CountDownTimer cdt = null;
             }
         };
         cdt.start();
-        
+       }catch(Exception ex){
+    	   ex.printStackTrace();
+       }
         
         String[] list = new String[] {"1 test", "2tester"};
         final Boolean finals = false;
@@ -150,7 +150,7 @@ CountDownTimer cdt = null;
         			}else{
         				n=1;
         			}
-        			d.addAttempt(n, "F", Functions.getCompetitorID(),Functions.getActiveEvent());
+        			d.addAttempt(n, "FOUL", Functions.getCompetitorID(),Functions.getActiveEvent());
    				}else{
    					Toast.makeText(getApplicationContext(), "Max attempts reached", Toast.LENGTH_SHORT).show();
    				}
@@ -202,7 +202,7 @@ CountDownTimer cdt = null;
             			}else{
             				n=1;
             			}
-            			d.addAttempt(n, "P", Functions.getCompetitorID(),Functions.getActiveEvent());
+            			d.addAttempt(n, "PASS", Functions.getCompetitorID(),Functions.getActiveEvent());
        					}else{
            					Toast.makeText(getApplicationContext(), "Max attempts reached", Toast.LENGTH_SHORT).show();
            				}
